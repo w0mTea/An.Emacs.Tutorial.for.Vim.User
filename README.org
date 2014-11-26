@@ -1,0 +1,102 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:comment d:(not "LOGBOOK") date:t
+#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil prop:nil
+#+OPTIONS: stat:t tags:t tasks:t tex:t timestamp:t toc:t todo:t |:t
+#+TITLE: README.md
+#+DATE: 2014-11-26
+#+AUTHOR: w0mTea
+#+EMAIL: w0mT3a@gmail.com
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.3.1 (Org mode 8.3beta)
+
+* Introduction
+This file is an introduction to those who want to modify the org file and export it
+to pdf files on their local environment.
+* My environment
+I write this document in Emacs 24.3.1 with org-mode 8.3beta.
+According to my experience, there are some changes between org-mode 7.9 and 8.3beta.
+So I suggest you'd better use org-mode greater than 8.0 to export the org file.
+* org-mode LaTex settings
+At first, I manually require org-latex's el file and enable export listings.
+#+BEGIN_SRC lisp
+(require 'ox-latex)
+(setq org-export-latex-listings t)
+#+END_SRC
+
+Because there is a confilt between inputenc and xeCJK package of LaTeX, 
+and inputenc is in the default package list of org-mode,
+I disabled the default package list.
+So, I add some useful package to the user's package list.
+#+BEGIN_SRC lisp
+(add-to-list 'org-latex-packages-alist
+             '("" "hyperref" t))
+(add-to-list 'org-latex-packages-alist
+	     '("" "xcolor" t))
+(add-to-list 'org-latex-packages-alist
+	     '("" "listings" t))
+(add-to-list 'org-latex-packages-alist
+	     '("" "fontspec" t))
+(add-to-list 'org-latex-packages-alist
+	     '("" "indentfirst" t))
+(add-to-list 'org-latex-packages-alist
+	     '("" "xunicode" t))
+(add-to-list 'org-latex-packages-alist
+	     '("" "amsmath"))
+#+END_SRC
+
+Next, I add an org-latex-class, /my-org-article-zh/.
+In the class setting, I set something about xeCJK and listings.
+You need to install the following fonts:
+- SimSun
+- DejaVu Sans
+- DejaVu Serif
+- DejaVu Sans Mono
+#+BEGIN_SRC lisp
+(add-to-list 'org-latex-classes
+          '("my-org-article-zh"
+"\\documentclass{article}
+\\usepackage[slantfont, boldfont]{xeCJK}
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+\\setCJKmainfont{SimSun}
+\\parindent 2em
+ 
+\\setmainfont{DejaVu Sans}
+\\setsansfont{DejaVu Serif}
+\\setmonofont{DejaVu Sans Mono}
+%\\punctstyle{DejaVu Sans}
+ 
+ 
+\\defaultfontfeatures{Mapping=tex-text}
+
+\\XeTeXlinebreaklocale \"zh\"
+\\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+
+\\lstset{numbers=left, 
+numberstyle= \\tiny, 
+keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50}, 
+frame=shadowbox, 
+rulesepcolor= \\color{ red!20!green!20!blue!20} 
+} 
+
+[EXTRA]
+"
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+END_SRC
+
+Finally, I change the export process from /pdflatex/ to /xelatex/,
+so you need to install xetex first.
+#+BEGIN_SRC lisp
+(setq org-latex-pdf-process
+      '("xelatex -interaction nonstopmode %b"
+	"xelatex -interaction nonstopmode %b"))
+#+END_SRC
