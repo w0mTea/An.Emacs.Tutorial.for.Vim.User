@@ -61,6 +61,7 @@ You need to install the following fonts:
 
     (add-to-list 'org-latex-classes
               '("my-org-article-zh"
+    
     "\\documentclass{article}
     
     \\usepackage[slantfont, boldfont]{xeCJK}
