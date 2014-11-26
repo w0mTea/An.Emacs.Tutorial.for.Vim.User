@@ -12,6 +12,8 @@
 
 # Introduction<a id="sec-1"></a>
 
+This file is not the tutorial, and the pdf file in the repo is that.
+
 This file is an introduction to those who want to modify the org file and export it
 to pdf files on their local environment.
 
@@ -60,33 +62,44 @@ You need to install the following fonts:
     (add-to-list 'org-latex-classes
               '("my-org-article-zh"
     "\\documentclass{article}
+    
     \\usepackage[slantfont, boldfont]{xeCJK}
+    
     [NO-DEFAULT-PACKAGES]
+    
     [PACKAGES]
+    
     \\setCJKmainfont{SimSun}
+    
     \\parindent 2em
     
     \\setmainfont{DejaVu Sans}
-    \\setsansfont{DejaVu Serif}
-    \\setmonofont{DejaVu Sans Mono}
-    %\\punctstyle{DejaVu Sans}
     
+    \\setsansfont{DejaVu Serif}
+    
+    \\setmonofont{DejaVu Sans Mono}
     
     \\defaultfontfeatures{Mapping=tex-text}
     
     \\XeTeXlinebreaklocale \"zh\"
+    
     \\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
     
-    
     \\lstset{numbers=left, 
+    
     numberstyle= \\tiny, 
+    
     keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50}, 
+    
     frame=shadowbox, 
+    
     rulesepcolor= \\color{ red!20!green!20!blue!20} 
+    
     } 
     
     [EXTRA]
     "
+    
                  ("\\section{%s}" . "\\section*{%s}")
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
