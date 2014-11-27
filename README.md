@@ -4,7 +4,7 @@
 <ul>
 <li><a href="#sec-1">1. Introduction</a></li>
 <li><a href="#sec-2">2. My environment</a></li>
-<li><a href="#sec-3">3. org-mode LaTex settings</a></li>
+<li><a href="#sec-3">3. org-mode LaTeX settings</a></li>
 </ul>
 </div>
 </div>
@@ -23,7 +23,7 @@ I write this document in Emacs 24.3.1 with org-mode 8.3beta.
 According to my experience, there are some changes between org-mode 7.9 and 8.3beta.
 So I suggest you'd better use org-mode greater than 8.0 to export the org file.
 
-# org-mode LaTex settings<a id="sec-3"></a>
+# org-mode LaTeX settings<a id="sec-3"></a>
 
 At first, I manually require org-latex's el file and enable export listings.
 

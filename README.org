@@ -22,7 +22,7 @@ to pdf files on their local environment.
 I write this document in Emacs 24.3.1 with org-mode 8.3beta.
 According to my experience, there are some changes between org-mode 7.9 and 8.3beta.
 So I suggest you'd better use org-mode greater than 8.0 to export the org file.
-* org-mode LaTex settings
+* org-mode LaTeX settings
 At first, I manually require org-latex's el file and enable export listings.
 #+BEGIN_SRC lisp
 (require 'ox-latex)
