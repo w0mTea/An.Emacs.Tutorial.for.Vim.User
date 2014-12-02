@@ -136,7 +136,7 @@
    这里只讲一种我最常用到的也是感觉最方便的方法：el-get安装。
    
    在你的配置文件中加入下列部分：（需要注意的是，el-get的默认位置也在.emacs.d文件夹内）
-#+BEGIN_SRC lisp
+#+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 (unless (require 'el-get nil t)
@@ -186,7 +186,7 @@
 把上述代码段保存后，重新运行emacs，就会自动安装el-get
 
 el-get安好了，那么怎么安装evil-mode呢？回到上面那段代码，可以看到
-#+BEGIN_SRC lisp
+#+BEGIN_SRC emacs-lisp
 ;; now set our own packages
 (setq
  my:el-get-packages
@@ -201,7 +201,7 @@ el-get安好了，那么怎么安装evil-mode呢？回到上面那段代码，�
 那么我们就可以自动的安装并启用对应扩展。
 大多数常见扩展都可以被el-get自动找到，evil-mode也不例外。
 因此只要在这段代码中加上evil-mode就可以。搞定后和下面的差不多：
-#+BEGIN_SRC lisp
+#+BEGIN_SRC emacs-lisp
 (setq
  my:el-get-packages
  '(el-get				
@@ -215,7 +215,7 @@ el-get安好了，那么怎么安装evil-mode呢？回到上面那段代码，�
 之后重启emacs，就可以安装了。
 ** 启用
 安装成功后，只需要在配置文件中加入
-#+BEGIN_SRC lisp
+#+BEGIN_SRC emacs-lisp
 (require 'evil)
 (evil-mode 1)
 #+END_SRC
@@ -260,7 +260,7 @@ el-get安装的扩展包会被记录在一个文件中，无论通过哪一种�
 删除包列表中要删除的包名，使用
 *M-x el-get-remove RET* 再输入包名即可。
 *** recipe文件
-el-get使用一些列的recipe文件来处理安装包。
+el-get使用一系列的recipe文件来处理安装包。
 每一个recipe文件都描述了安装包的名字、下载地址、版本、安装后的初始化动作等信息。
 这些recipe文件就相当于包管理器的软件源元数据，
 我们查询、安装等操作都需要用到它。
@@ -278,6 +278,52 @@ el-get使用一些列的recipe文件来处理安装包。
 - EmacsWiKi: [[http://www.emacswiki.org/emacs/el-get]]
 - Github: [[https://github.com/dimitri/el-get/]]
 ** ELPA
+ELPA也是一个emacs的包管理工具，在emacs24及以上版本已经默认集成(package.el)。
+*** 简单配置
+ELPA需要添加一些仓库源，如下：
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+#+END_SRC
+这样就会添加gnu官方源、marmalade、melpa三个源。
+
+在某些情况下，启动emacs时会显示package.el没有被初始化，可以通过加入下列代码在启动文件的非末尾位置解决：
+#+BEGIN_SRC emacs-lisp
+(setq package-enable-at-startup nil)
+(package-initialize)
+#+END_SRC
+*** 安装/删除/升级
+1. *M-x list-packages RET* 会列举所有包。通过 *C-s xxx* 可以快速找到你想安装的包
+2. 光标移动到对应包名上，按：
+   - RET：会显示包的介绍
+   - i：标记该包为待安装
+   - u：取消标记
+   - d：标记为待删除
+   - U：标记为待升级。只有可升级的包才可被标记
+   - x：执行，会删除d标记的包，安装i标记的包
+   - r：刷新列表
+   - q：退出列表
+*** 本节参考资料
+- EmacsWiKi：http://www.emacswiki.org/emacs/ELPA
+- ergoEmacs：http://ergoemacs.org/emacs/emacs_package_system.html
+** 手动安装
+有些时候，会有一些冷门的包或者自己写的包无法在前面讲过的仓库里找到，
+而你也不想写el-get的recipe或者elpa的本地仓库，
+那么就会用到本节的知识。
+
+首先，你需要让emacs可以找到你的扩展文件。假如你的文件在
+*~/Documents/emacs-package* 目录下，那么在配置中加入：
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/Documents/emacs-package")
+(load "you-package") ;.el后缀最好省略
+#+END_SRC
+这样就可以启用你的扩展了。
+
+由于手动安装有着诸多不便，而且使用也较为少，
+因此这里仅列出最基本的用法。更复杂的用法，请见：
+- ergoEmacs：http://ergoemacs.org/emacs/emacs_installing_packages.html
 * 保护你的手指
 emacs需要大量使用ctrl和alt两个键，但在大部分qwert键盘上，ctrl的位置都在很难按到的角落里。
 据说，如果长期使用小指按角落的ctrl会很容易导致手部健康出现问题。
@@ -312,7 +358,54 @@ emacs需要大量使用ctrl和alt两个键，但在大部分qwert键盘上，ctr
 - 缺点：相比上面的方法来说最贵；不同系统驱动可能有潜在问题
 - 推荐度：3/5
 * 编程语言配置
+几乎可以肯定，emacs用户中程序员占了大多数，
+因此没有相应配置怎么能行？
+本章会列举一些常用的语言的用到的常用扩展以及简单配置，
+更具体的配置请参照emacsWiKi上仔细进行。
+** C/C++
+写linux内核那帮家伙有不少都是用emacs的，
+emacs是c写的，
+GNU的许多东西是c写的，
+所以emacs默认就可以不错的支持C，
+而C/C++的相关插件堪称多如牛毛……
+这里仅列出一些常用插件，
+大家可以一一尝试，选择最复合自己习惯的。
+*** 缩进
+写代码，缩进搞不好，心情绝对好不了，这里就写写emacs中的c的缩进。
+*** 各种扩展
+** Python
+** Lisp
+** Perl
+** Ruby
+** Java
+事实证明，如果需要写java，请出门左转eclipse或出门右转intellij……
+emacs写java并不是一个很好的选择，而且相关插件开发的人也是寥寥无几，
+毕竟把emacs弄到eclipse或intellij那样好用绝对是一个艰难的事，
+所以广大的emacser都机智的选择了上述两种IDE之一。
 * 重量级应用——org-mode
+org-mode是啥呢？它是一个很强大的东西，
+可以快速高效的通过纯文本文件来完成做笔记、TO-DO list、项目计划等一系列事情。
+它有些类似vim下的vimwiki和markdown，但比前两者强大的多。
+
+用org-mode写文档类的东西，你需要关注的只有你的文档的结构和内容，
+而其他的，都有org-mode帮你搞定，毫无疑问，这是一种相当爽的感觉。
+而且org-mode写完后，可以轻松的导出成各种格式：html、markdown、
+pdf、odt（进而通过libreoffice等转换成MS Office格式）、beamer等等。
+不用意外，你正在看的这个pdf，也是org-mode生成的。相信如果没有org-mode，
+我是不会有勇气开始写这个文档的。
+
+由于org-mode的内容十分多，多到即使我再写一年也未必写的全的程度，
+所以我只能写一些基本的用法并给出一些参考资料，大家若有需要，可以查阅这些资料。
+** 安装&基础用法
+** 文档结构
+** 表格
+** 链接
+** To-Do
+** 标签
+** 时间和日期
+** 日程
+** 导出
+** 参考资料
 * 文档和资料
   <<documents>>
   - emacs manual:[[http://www.gnu.org/software/emacs/manual/html_node/emacs/index.html]]
