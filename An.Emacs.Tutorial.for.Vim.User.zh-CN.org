@@ -420,6 +420,7 @@ org-mode里标题的表示十分简单，*表示标题，几个*就是几级标�
 在标题上按TAB，所执行的操作是一个循环，如图：
 
 #+ATTR_LATEX: :float t
+#+NAME: tab-cycle
 #+BEGIN_SRC ditaa :file images/cycle.png
 /--------\     /---------\     /----------\
 | folded | --> | subtree | --> | show all | --\
@@ -507,8 +508,103 @@ org-mode中还提供了强大的表格功能。
 
 如果想在上下两栏间插入分割线，可以按 *C-c -*
 *** 计算
+org-mode表格还提供了计算的功能。
+
+设想这样一个情景，你需要做一个简单的统计，
+给出物品的单价和数量，算出总金额，如何让org-mode帮做这个计算呢？请看例子：
+#+BEGIN_SRC org-mode
+| 单价 | 数量 | 总额   |
+|------+------+--------|
+|   10 |   10 | =$1*$2 |
+#+END_SRC
+这样，在表格中按tab就会自动计算出结果了。其中$1表示第一列，$2表示第二列 。
+
+可是这样需要手动给每一个需要计算的格子打上公式，还是很麻烦，能不能批量的计算呢？
+当然可以啦。在表格下面加上这句话：
+#+BEGIN_SRC org-mode
+#+TBLFM: $3=$1*$2
+#+END_SRC
+在需要进行全表格计算的时候，在上面那句话上按 *C-c C-c* 就可以看到结果啦
+
+如果想要知道某一列所有数的和呢？在那一列上，按 *C-c +*
+就会算出结果，并且可以直接粘贴。
 *** 快捷键
+这里仅罗列一些常用快捷键哈：
+- C-c |：插入表格
+- C-c C-c：在表格内是对齐表格，在上面说的那句话上是计算表格
+- <TAB>：移到下一格
+- S-<TAB>：移到上一格
+- <RET>：移到下一列
+- M-a：移到一格的头部
+- M-e：移到一格的尾部
+- M-<left>/M-<right>：把一列左移/右移
+- M-S-<left>/M-S-<rigth>：删除一列/插入一列
+- M-<up>/M-<down>：一行上移/下移
+- M-S-<up>/M-S-<down>：删除一行/插入一行
+- C-c -：插入水平分割线
+- C-c +：计算一列之和
+- C-c ^：排序
 ** 链接
+<<link>>
+就像html一样，org-mode提供了丰富的链接功能。
+
+链接的基本格式如下：
+#+BEGIN_SRC org-mode
+[[link][description]] 或 [[link]]
+#+END_SRC
+其中link是要链接的东东，description是描述。
+
+上面的两个链接出来的样子是这样的：
+[[link][description]] 或 [[link]] 
+*** 内部链接
+如果你的链接不像一个url，那么org-mode会把它按内部链接处理。
+上面例子中的链接会链接到本节，为什么呢？因为我在这一节内加了一个锚点：
+#+BEGIN_SRC org-mode
+<<link>>
+#+END_SRC
+这样点击链接就会找到这个锚点并跳转过去了。
+*** 外部链接
+org-mode支持各种各样的外部链接，这里仅列出几个常用的，
+全部的链接支持在这里：[[http://orgmode.org/manual/External-links.html#External-links][org-mode手册]]
+#+BEGIN_SRC org-mode
+http://xxxxx
+file:path/to/some/file
+path/to/some/file
+#+END_SRC
+** 代码块
+org-mode还提供了非常非常强大的代码块功能，除了基础的显示代码的功能以外，
+还有诸多花式玩法（本文档里的[[tab-cycle][图]]就是用org-mode的代码块写出来的哦）。
+这一节只说说基础用法和一些简单的花式（比如说画图），更复杂的玩法可以去org-manual好好看看哈。
+*** 基本用法
+插入代码块的方法很简单哈，如下：
+
+#+BEGIN_LaTeX
+\#+BEGIN\_SRC c
+#+END_LaTeX
+#+BEGIN_VERSE
+#include<stdio.h>
+int main()
+{
+    printf("hello org-mode!\n");
+}
+#+END_VERSE
+#+BEGIN_LaTeX
+\#+END\_SRC
+#+END_LaTeX
+
+出来的效果是这样的：
+#+BEGIN_SRC c
+#include<stdio.h>
+int main()
+{
+    printf("hello org-mode!\n");
+}
+#+END_SRC
+
+注意需要在BEGIN\(\_\)SRC后加上语言名字，以使用该语言特有的语法高亮缩进之类的。
+每次都打带#的一长串东西多烦人啊，因此org-mode提供了快捷键：
+输入<s并在上面按<TAB>，看看有没有惊喜？
+** 元数据
 ** To-Do
 ** 标签
 ** 时间和日期
@@ -519,7 +615,8 @@ org-mode中还提供了强大的表格功能。
 - org-mode manual:http://orgmode.org/manual/index.html
 * 文档和资料
   <<documents>>
-  - emacs manual:[[http://www.gnu.org/software/emacs/manual/html_node/emacs/index.html]]
+  - emacs manual: [[http://www.gnu.org/software/emacs/manual/html_node/emacs/index.html]]
   - emacs wiki: [[http://www.emacswiki.org/emacs/]]
+  - A blog: http://home.fnal.gov/~neilsen/notebook/orgExamples/org-examples.html
 * 结尾
   本文仓促写成，错漏颇多，还望各位指出错误，让这份教程可以帮助更多的人。
