@@ -375,14 +375,41 @@ GNU的许多东西是c写的，
 写代码，缩进搞不好，心情绝对好不了，这里就写写emacs中的c的缩进。
 *** 各种扩展
 ** Python
+- Jedi(一个代码补全插件)
+- Autopair(补全括号插件)
+Jedi和Autopair都可以使用前文提到的el-get来安装启用。
+Jedi默认打开py文件会进行补全，补全时会跳出窗口或文字,按Enter即可。
+Autopair则需要一下代码来启动执行:
+#+BEGIN_SRC emacs-lisp 
+(show-paren-mode t) ;; 匹配括号高亮 
+(require 'autopair)
+(autopair-global-mode) ;; 自动补全括号
+#+END_SRC 
 ** Lisp
 ** Perl
 ** Ruby
+** Markdown
+Markdown在emacs中启用需要下载一个[[http://jblevins.org/projects/markdown-mode/markdown-mode.el][Emacs lisp文件]].
+将这个文件放入emacs配置文件夹就可以了.
+接着将一下代码写入emacs配置文件,以后打开.md or .markdown文件都会自动启用高亮.
+#+BEGIN_SRC emacs-lisp
+;;;MarkDown                                                                                                               
+(add-to-list 'load-path "~/.emacs.d/modes")
+(autoload 'markdown-mode "markdown-mode.el"
+    "Major mode for editing Markdown files" t)
+(setq auto-mode-alist
+    (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+(setq auto-mode-alist
+    (cons '("\\.md" . markdown-mode) auto-mode-alist))
+ 
+(setq linum-format "%d ") ;set format 
+#+END_SRC
 ** Java
 事实证明，如果需要写java，请出门左转eclipse或出门右转intellij……
 emacs写java并不是一个很好的选择，而且相关插件开发的人也是寥寥无几，
 毕竟把emacs弄到eclipse或intellij那样好用绝对是一个艰难的事，
 所以广大的emacser都机智的选择了上述两种IDE之一。
+
 * 重量级应用——org-mode
 org-mode是啥呢？它是一个很强大的东西，
 可以快速高效的通过纯文本文件来完成做笔记、TO-DO list、项目计划等一系列事情。
