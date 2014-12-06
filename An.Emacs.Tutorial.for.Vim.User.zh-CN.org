@@ -261,6 +261,7 @@ el-get安装的扩展包会被记录在一个文件中，无论通过哪一种�
 删除包列表中要删除的包名，使用
 *M-x el-get-remove RET* 再输入包名即可。
 *** recipe文件
+<<recipe>>
 el-get使用一系列的recipe文件来处理安装包。
 每一个recipe文件都描述了安装包的名字、下载地址、版本、安装后的初始化动作等信息。
 这些recipe文件就相当于包管理器的软件源元数据，
@@ -375,35 +376,111 @@ GNU的许多东西是c写的，
 写代码，缩进搞不好，心情绝对好不了，这里就写写emacs中的c的缩进。
 *** 各种扩展
 ** Python
-- Jedi(一个代码补全插件)
-- Autopair(补全括号插件)
-Jedi和Autopair都可以使用前文提到的el-get来安装启用。
-Jedi默认打开py文件会进行补全，补全时会跳出窗口或文字,按Enter即可。
-Autopair则需要一下代码来启动执行:
-#+BEGIN_SRC emacs-lisp 
-(show-paren-mode t) ;; 匹配括号高亮 
-(require 'autopair)
-(autopair-global-mode) ;; 自动补全括号
-#+END_SRC 
+似乎每一个流行的语言在emacs都有一大堆的插件可以使用，
+因此怎么选择这堆插件往往让人头疼。
+本章会尽量详细的介绍一些主流插件的特点以便各位选择，
+同时给出一些小而好用的插件。
+
+最常见的python扩展就是emacs24.2以上自带的python.el和需要自己安装的python-mode.el。
+下面会分别说说这两个插件
+*** python.el
+python.el默认包含在了emacs24.2以上的版本内。
+如果想要确保自己使用的是最新的python.el，可以使用el-get安装。
+安装时会发现有python和python24两个选项，其中python24是一个分支版本，更稳定却没有加入新的特性。
+*注意，* 如果你正在使用emacs24.4或以上的版本，还需要同时安装cl-lib。
+
+python.el支持许多特性，包括但不限于：
+- 自动检测缩进
+- 内置python shell（支持python2和3）
+- python shell补全
+- 支持调试利器PDB
+- S-exp类似的移动方式
+*** python-mode.el
+python-mode需要自己安装，可以通过el-get来搞定。
+安装后，打开.py文件就会自动加载python-mode。
+
+python-mode可以很容易的更改使用其他python解释器，下面以ipython为例：
+#+BEGIN_SRC emacs-lisp
+;python mode
+(require 'python-mode)
+;use IPython
+(setq-default py-shell-name "ipython")
+(setq-default py-which-bufname "IPython")
+#+END_SRC
+
+解释执行类语言著名的REPL（Read-Evaluate-Print-Loop）怎么可以不能在emacs里实现呢？
+很简单，在写了python代码后，你可以
+1. 选中你要执行的代码块（选中可以用鼠标拖动，用evil-mode可以按v，不用evil-mode可以按着shift移动光标），
+   点击工具栏的python标签，点Execute Region，就可以看到结果啦（这个动作可以用快捷键搞定）
+2. 点工具栏的python标签，点Execute Buffer，会把整个文件执行一遍（同样可以快捷键搞定）
+附一张实例图（这里使用的ipython）：
+
+#+NAME:python-repl-sample
+[[./images/python-repl-sample.png]]
+
+基于python-mode可以构建一个python的IDE，这个有视频演示（需翻墙）：
+http://www.youtube.com/watch?v=0cZ7szFuz18If
+*** 便利的小插件
+ - Jedi(一个代码补全插件)
+ - Autopair(补全括号插件)
+ Jedi和Autopair都可以使用前文提到的el-get来安装启用。
+ Jedi默认打开py文件会进行补全，补全时会跳出窗口或文字,按Enter即可。
+ Autopair则需要以下代码来启动执行:
+ #+BEGIN_SRC emacs-lisp 
+ (show-paren-mode t) ;; 匹配括号高亮 
+ (require 'autopair)
+ (autopair-global-mode) ;; 自动补全括号
+ #+END_SRC 
+*** 参考资料
+本节涉及到的插件以及插件组合过多，难免有所遗漏谬误，
+因此建议各位如有疑惑，不要忘了查询下列资料：
+- EmacsWiKi：http://www.emacswiki.org/PythonProgrammingInEmacs
+- EmacsWiKi：http://www.emacswiki.org/emacs/ProgrammingWithPythonModeDotEl
+- PythonWiki：https://wiki.python.org/moin/EmacsEditor
+- python.el main page：https://github.com/fgallina/python.el
+
 ** Lisp
 ** Perl
 ** Ruby
 ** Markdown
-Markdown在emacs中启用需要下载一个[[http://jblevins.org/projects/markdown-mode/markdown-mode.el][Emacs lisp文件]].
-将这个文件放入emacs配置文件夹就可以了.
-接着将一下代码写入emacs配置文件,以后打开.md or .markdown文件都会自动启用高亮.
+*** 插件及安装
+ # Markdown在emacs中启用需要下载一个[[http://jblevins.org/projects/markdown-mode/markdown-mode.el][Emacs lisp文件]]
+ # 将这个文件放入emacs配置文件夹就可以了。
+ # Comment by w0mTea：这个插件在emacswiki上有，所以可以直接用el-get安装了
+
+
+ Emacs有markdown-mode来提供对markdown的支持。此插件可以通过el-get安装。
+ 若el-get无法找到此插件，记得同步emacsWiKi源（[[recipe][方法见此]]）
+
+ # 接着将以下代码写入emacs配置文件,以后打开.md or .markdown文件都会自动启用高亮。
+ # ;;;MarkDown                                                                                                               
+ # (add-to-list 'load-path "~/.emacs.d/modes")
+ # (autoload 'markdown-mode "markdown-mode.el"
+ #     "Major mode for editing Markdown files" t)
+ # (setq auto-mode-alist
+ #    (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+ # (setq auto-mode-alist
+ #    (cons '("\\.md" . markdown-mode) auto-mode-alist))
+ # 
+ # (setq linum-format "%d ") ;set format 
+ # Comment by w0mTea：上面的配置都被el-get做过了，所以就不用再写了
+
+ 安装后，打开.md或.markdown文件时会自动加载markdown-mode并提供高亮支持。
+*** 配置
+如果你常写markdown，那么对markdown文件强制进行一些静态语法检查是十分有用的。
+举个例子，在链接中大量使用的方括号和圆括号很容易被遗漏掉后半边。
+因此我们可以要求emacs检查括号：
 #+BEGIN_SRC emacs-lisp
-;;;MarkDown                                                                                                               
-(add-to-list 'load-path "~/.emacs.d/modes")
-(autoload 'markdown-mode "markdown-mode.el"
-    "Major mode for editing Markdown files" t)
-(setq auto-mode-alist
-    (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
-(setq auto-mode-alist
-    (cons '("\\.md" . markdown-mode) auto-mode-alist))
- 
-(setq linum-format "%d ") ;set format 
+ (add-hook 'markdown-mode-hook
+            (lambda ()
+              (when buffer-file-name
+                (add-hook 'after-save-hook
+                          'check-parens
+                          nil t))))
 #+END_SRC
+*** 另一种写Markdown的方式
+其实还有一种更省事也更好用的写markdown的方法，那就是用org-mode导出生成。
+想了解更多的读者可以看[[org-mode][重量级应用——org-mode]]以及[[org-mode-export][org-mode导出]]的markdown部分。
 ** Java
 事实证明，如果需要写java，请出门左转eclipse或出门右转intellij……
 emacs写java并不是一个很好的选择，而且相关插件开发的人也是寥寥无几，
@@ -411,6 +488,7 @@ emacs写java并不是一个很好的选择，而且相关插件开发的人也�
 所以广大的emacser都机智的选择了上述两种IDE之一。
 
 * 重量级应用——org-mode
+<<org-mode>>
 org-mode是啥呢？它是一个很强大的东西，
 可以快速高效的通过纯文本文件来完成做笔记、TO-DO list、项目计划等一系列事情。
 它有些类似vim下的vimwiki和markdown，但比前两者强大的多。
@@ -608,18 +686,6 @@ org-mode还提供了非常非常强大的代码块功能，除了基础的显示
 #+BEGIN_LaTeX
 \#+BEGIN\_SRC c
 #+END_LaTeX
-#+BEGIN_VERSE
-#include<stdio.h>
-int main()
-{
-    printf("hello org-mode!\n");
-}
-#+END_VERSE
-#+BEGIN_LaTeX
-\#+END\_SRC
-#+END_LaTeX
-
-出来的效果是这样的：
 #+BEGIN_SRC c
 #include<stdio.h>
 int main()
@@ -627,6 +693,9 @@ int main()
     printf("hello org-mode!\n");
 }
 #+END_SRC
+#+BEGIN_LaTeX
+\#+END\_SRC
+#+END_LaTeX
 
 注意需要在BEGIN\(\_\)SRC后加上语言名字，以使用该语言特有的语法高亮缩进之类的。
 每次都打带#的一长串东西多烦人啊，因此org-mode提供了快捷键：
@@ -637,6 +706,7 @@ int main()
 ** 时间和日期
 ** 日程
 ** 导出
+<<org-mode-export>>
 ** 参考资料
 <<org-mode-manual>>
 - org-mode manual:http://orgmode.org/manual/index.html
