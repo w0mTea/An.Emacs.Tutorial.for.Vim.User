@@ -431,6 +431,10 @@ python.el支持许多特性，包括但不限于：
    "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 
 #+END_SRC
+
+下面来个例子：
+#+ATTR_LATEX: :float t
+[[file:./images/python-repl-sample0.png]]
 *** python-mode.el
 python-mode需要自己安装，可以通过el-get来搞定。
 安装后，打开.py文件就会自动加载python-mode。

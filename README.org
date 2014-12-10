@@ -20,7 +20,7 @@ This file is an introduction to those who want to modify the org file and export
 to pdf files on their local environment.
 * Change log
 In the lastest settings, I add a new org-latex-class
-callel "my-org-book-zh", which use "book" instead of "article".
+called "my-org-book-zh", which use "book" instead of "article".
 * My environment
 I write this document in Emacs 24.3.1 with org-mode 8.3beta.
 

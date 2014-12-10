@@ -21,7 +21,7 @@ to pdf files on their local environment.
 # Change log<a id="sec-2"></a>
 
 In the lastest settings, I add a new org-latex-class
-callel "my-org-book-zh", which use "book" instead of "article".
+called "my-org-book-zh", which use "book" instead of "article".
 
 # My environment<a id="sec-3"></a>
 
