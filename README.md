@@ -3,8 +3,9 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#sec-1">1. Introduction</a></li>
-<li><a href="#sec-2">2. My environment</a></li>
-<li><a href="#sec-3">3. org-mode LaTeX settings</a></li>
+<li><a href="#sec-2">2. Change log</a></li>
+<li><a href="#sec-3">3. My environment</a></li>
+<li><a href="#sec-4">4. org-mode LaTeX settings</a></li>
 </ul>
 </div>
 </div>
@@ -12,23 +13,36 @@
 
 # Introduction<a id="sec-1"></a>
 
-This file is not the tutorial, and the pdf file in the repo is that.
+This file **IS NOT** the tutorial, and the **pdf file** in the repo is that.
 
 This file is an introduction to those who want to modify the org file and export it
 to pdf files on their local environment.
 
-# My environment<a id="sec-2"></a>
+# Change log<a id="sec-2"></a>
+
+In the lastest settings, I add a new org-latex-class
+callel "my-org-book-zh", which use "book" instead of "article".
+
+# My environment<a id="sec-3"></a>
 
 I write this document in Emacs 24.3.1 with org-mode 8.3beta.
+
 According to my experience, there are some changes between org-mode 7.9 and 8.3beta.
 So I suggest you'd better use org-mode greater than 8.0 to export the org file.
 
-# org-mode LaTeX settings<a id="sec-3"></a>
+# org-mode LaTeX settings<a id="sec-4"></a>
 
 At first, I manually require org-latex's el file and enable export listings.
 
     (require 'ox-latex)
     (setq org-export-latex-listings t)
+
+To export source block using listings(the default is verbatim),
+I add those:
+
+    ; org-mode source code setup in exporting to latex
+    (add-to-list 'org-latex-listings '("" "listings"))
+    (add-to-list 'org-latex-listings '("" "color"))
 
 Because there is a confilt between inputenc and xeCJK package of LaTeX, 
 and inputenc is in the default package list of org-mode,
@@ -49,8 +63,10 @@ So, I add some useful package to the user's package list.
                  '("" "xunicode" t))
     (add-to-list 'org-latex-packages-alist
                  '("" "amsmath"))
+    (add-to-list 'org-latex-packages-alist
+                 '("" "graphicx" t))
 
-Next, I add an org-latex-class, *my-org-article-zh*.
+Next, I add an org-latex-class, *my-org-book-zh*.
 In the class setting, I set something about xeCJK and listings.
 You need to install the following fonts:
 
@@ -60,11 +76,15 @@ You need to install the following fonts:
 -   DejaVu Sans Mono
 
     (add-to-list 'org-latex-classes
-              '("my-org-article-zh"
+              '("my-org-book-zh"
     
-    "\\documentclass{article}
+    "\\documentclass{book}
     
     \\usepackage[slantfont, boldfont]{xeCJK}
+    
+    % chapter set
+    
+    \\usepackage[Lenny]{fncychap}
     
     [NO-DEFAULT-PACKAGES]
     
@@ -106,6 +126,8 @@ You need to install the following fonts:
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+I also user class options "oneside" for better appearance.
 
 Finally, I change the export process from *pdflatex* to *xelatex*,
 so you need to install xetex first.

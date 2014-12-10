@@ -359,6 +359,22 @@ emacs需要大量使用ctrl和alt两个键，但在大部分qwert键盘上，ctr
 因此没有相应配置怎么能行？
 本章会列举一些常用的语言的用到的常用扩展以及简单配置，
 更具体的配置请参照emacsWiKi上仔细进行。
+** 通用配置
+本节主要介绍一些独力于具体语言之外的通用配置，
+如自动补全、版本控制、括号匹配等
+
+#+BEGIN_COMMENT:
+ - Autopair(补全括号插件)
+ Autopair可以使用前文提到的el-get来安装启用。
+ Autopair则需要以下代码来启动执行:
+ #+BEGIN_SRC lisp 
+ (show-paren-mode t) ;; 匹配括号高亮 
+ (require 'autopair)
+ (autopair-global-mode) ;; 自动补全括号
+ #+END_SRC 
+
+我觉得这一段还是放在这里好= =
+#END_COMMENT
 ** C/C++
 写linux内核那帮家伙有不少都是用emacs的，
 emacs是c写的，
@@ -390,6 +406,31 @@ python.el支持许多特性，包括但不限于：
 - python shell补全
 - 支持调试利器PDB
 - S-exp类似的移动方式
+
+解释执行类语言著名的REPL（Read-Evaluate-Print-Loop）怎么可以不能在emacs里实现呢？
+
+在写完python代码后，输入 *C-c C-c*
+就可以执行整个文件的内容，
+选中部分代码后使用 *C-c C-r*
+就可以执行选中部分（选中可以用鼠标拖动，用evil-mode可以按v，不用evil-mode可以按着shift移动光标）。
+
+默认情况下，python.el会使用python来执行你的代码。但是你也可以使用iPython，方法如下：
+1. 在未启动python解释器时使用C-c C-c等命令会让你输入解释器路径，此时可以输入iPython的路径来启动iPython
+2. 设置如下代码
+#+BEGIN_SRC lisp
+(setq
+ python-shell-interpreter "ipython"
+ python-shell-interpreter-args ""
+ python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+ python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+ python-shell-completion-setup-code
+   "from IPython.core.completerlib import module_completion"
+ python-shell-completion-module-string-code
+   "';'.join(module_completion('''%s'''))\n"
+ python-shell-completion-string-code
+   "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+
+#+END_SRC
 *** python-mode.el
 python-mode需要自己安装，可以通过el-get来搞定。
 安装后，打开.py文件就会自动加载python-mode。
@@ -403,9 +444,9 @@ python-mode可以很容易的更改使用其他python解释器，下面以ipytho
 (setq-default py-which-bufname "IPython")
 #+END_SRC
 
-解释执行类语言著名的REPL（Read-Evaluate-Print-Loop）怎么可以不能在emacs里实现呢？
+在python-mode里如何进行REPL呢？
 很简单，在写了python代码后，你可以
-1. 选中你要执行的代码块（选中可以用鼠标拖动，用evil-mode可以按v，不用evil-mode可以按着shift移动光标），
+1. 选中你要执行的代码块
    点击工具栏的python标签，点Execute Region，就可以看到结果啦（这个动作可以用快捷键搞定）
 2. 点工具栏的python标签，点Execute Buffer，会把整个文件执行一遍（同样可以快捷键搞定）
 附一张实例图（这里使用的ipython）：
@@ -416,16 +457,13 @@ python-mode可以很容易的更改使用其他python解释器，下面以ipytho
 基于python-mode可以构建一个python的IDE，这个有视频演示（需翻墙）：
 http://www.youtube.com/watch?v=0cZ7szFuz18If
 *** 便利的小插件
- - Jedi(一个代码补全插件)
- - Autopair(补全括号插件)
- Jedi和Autopair都可以使用前文提到的el-get来安装启用。
- Jedi默认打开py文件会进行补全，补全时会跳出窗口或文字,按Enter即可。
- Autopair则需要以下代码来启动执行:
- #+BEGIN_SRC lisp 
- (show-paren-mode t) ;; 匹配括号高亮 
- (require 'autopair)
- (autopair-global-mode) ;; 自动补全括号
- #+END_SRC 
+**** Jedi
+Jedi是一个python补全库，可以为python提供快速而准确的补全，而且可以被各种工具使用（不仅限于emacs）。
+而emacs中基于Jedi的补全插件就有好几种，这里就说说Jedi.el
+
+安装Jedi.el很简单，通过el-get或ELPA都可以搞定。同时需要安装Jedi库（包管理器或者https://github.com/davidhalter/jedi）
+
+需要注意，jedi对python.el的支持更好，在python-mode下可能会有一些问题。
 *** 参考资料
 本节涉及到的插件以及插件组合过多，难免有所遗漏谬误，
 因此建议各位如有疑惑，不要忘了查询下列资料：
@@ -442,7 +480,6 @@ http://www.youtube.com/watch?v=0cZ7szFuz18If
  # Markdown在emacs中启用需要下载一个[[http://jblevins.org/projects/markdown-mode/markdown-mode.el][Emacs lisp文件]]
  # 将这个文件放入emacs配置文件夹就可以了。
  # Comment by w0mTea：这个插件在emacswiki上有，所以可以直接用el-get安装了
-
 
  Emacs有markdown-mode来提供对markdown的支持。此插件可以通过el-get安装。
  若el-get无法找到此插件，记得同步emacsWiKi源（[[recipe][方法见此]]）
@@ -729,5 +766,6 @@ int main()
   - emacs manual: [[http://www.gnu.org/software/emacs/manual/html_node/emacs/index.html]]
   - emacs wiki: [[http://www.emacswiki.org/emacs/]]
   - A blog: http://home.fnal.gov/~neilsen/notebook/orgExamples/org-examples.html
+* 致谢
 * 结尾
   本文仓促写成，错漏颇多，还望各位指出错误，让这份教程可以帮助更多的人。
