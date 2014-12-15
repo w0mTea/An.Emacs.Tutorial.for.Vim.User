@@ -735,27 +735,184 @@ org-mode还提供了非常非常强大的代码块功能，除了基础的显示
 #+BEGIN_LaTeX
 \begin{verbatim}
 #+BEGIN_SRC c
-#include<stdio.h>
-int main()
-{
-    printf("hello org-mode!\n");
-}
 #+END_SRC
 \end{verbatim}
 #+END_LaTeX
-最终效果如下：
+之后在BEGIN和END之间按C-c '
+即可进入代码块编辑模式，
+输入完毕后再按C-c '即可退出编辑模式。
+注意，有时候使用上述快捷键时显示此快捷键未定义，
+很可能是你正在使用汉字输入法导致的， 切换输入法即可。
+
+来一段效果展示：
 #+BEGIN_SRC c 
-#include<stdio.h>
-int main()
-{
-    printf("hello org-mode!\n");
-}
+  #include<stdio.h>
+  int main()
+  {
+      printf("hello org-mode!\n");
+  }
 #+END_SRC
 
 注意需要在BEGIN\(\_\)SRC后加上语言名字，以使用该语言特有的语法高亮缩进之类的。
 每次都打带#的一长串东西多烦人啊，因此org-mode提供了快捷键：
 输入<s并在上面按<TAB>，看看有没有惊喜？
+*** 画图
+org-mode的代码块可以调用ditaa来画图，对于一些简单的图来说只需要用org-mode就能搞定啦~
+
+org-mode需要使用ditaa来完成字符画，这个东西已经内置，所以不需要再下载。
+另外，ditaa需要java环境支持。
+
+在使用前，需要对emacs做一个小设置：
+#+BEGIN_SRC lisp
+; org-mode ditaa setup
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ditaa . t)))
+#+END_SRC
+
+现在就可以用ditaa画图啦。
+ditaa有不少特性，这里仅给出一些简单的例子，
+更有意思的大家可以去它的官方看哈，网址[[http://sourceforge.net/projects/ditaa/]]
+
+还记得上面的tab循环吗？其实它的源码是这样的
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+BEGIN_SRC ditaa :file images/cycle.png
+/--------\     /---------\     /----------\
+| folded | --> | subtree | --> | show all | --\
+\--------/     \---------/     \----------/   |
+    ^                                         |
+    |                                         |
+    \-----------------------------------------/
+#+END_SRC
+\end{verbatim}
+#+END_LaTeX
+
+再来一个例子：
+#+BEGIN_LaTeX
+\begin{verbatim}
+,#+BEGIN_SRC ditaa :file images/state-machine.png
+/-------\  int/char   +---------+ 
+| start | --------->  | declar0 | 
+\-------/ /--------   +---------+ 
+   |      |              ( |      
+   |      |                v      
+   |      | void      +---------+ 
+   |      |           |  func   | 
+   |      |           +---------+ 
+   |      |           void | ^    
+   |      |                v | (     
+   |      |            +-----------+ 
+   \------\----------> |   void    | 
+      void             +-----------+
+                             | main
+                             |
+           /-----------\     |
+           |   main    |<----/
+           \-----------/
+#+END_SRC
+\end{verbatim}
+#+END_LaTeX
+
+其效果如下：
+
+#+ATTR_LATEX: :float t
+#+BEGIN_SRC ditaa :file images/state-machine.png
+/-------\  int/char   +---------+ 
+| start | --------->  | declar0 | 
+\-------/ /--------   +---------+ 
+   |      |              ( |      
+   |      |                v      
+   |      | void      +---------+ 
+   |      |           |  func   | 
+   |      |           +---------+ 
+   |      |           void | ^    
+   |      |                v | (     
+   |      |            +-----------+ 
+   \------\----------> |   void    | 
+      void             +-----------+
+                             | main
+                             |
+           /-----------\     |
+           |   main    |<----/
+           \-----------/
+
+#+END_SRC
 ** 元数据
+上面已经出现过了诸如
+#+BEGIN_LaTeX
+\#+BEGIN\_SRC
+#+END_LaTeX
+这样的形式，其实这样的东东有一个特殊的名字，叫做元数据。
+这些元数据不会直接出现在文档中，而是起了各种各样的作用。
+这里我将会列举一些常用的元数据及其快捷键，
+更多的元数据的用途后面会陆续加入。
+
+#+BEGIN_LaTeX
+\begin{verbatim}
+s    #+BEGIN_SRC ... #+END_SRC 
+e    #+BEGIN_EXAMPLE ... #+END_EXAMPLE  
+q    #+BEGIN_QUOTE ... #+END_QUOTE      
+v    #+BEGIN_VERSE ... #+END_VERSE      
+c    #+BEGIN_CENTER ... #+END_CENTER 
+l    #+BEGIN_LATEX ... #+END_LATEX 
+L    #+LATEX: 
+h    #+BEGIN_HTML ... #+END_HTML 
+H    #+HTML: 
+a    #+BEGIN_ASCII ... #+END_ASCII 
+A    #+ASCII: 
+i    #+INDEX: LINE 
+I    #+INCLUDE: LINE
+\end{verbatim}
+#+END_LaTeX
+上面的缩写前加上<在按tab就会自动填充元数据啦，
+就像上面说的<s一样。
+另外，有些元数据可以加参数，比如：
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+BEGIN_SRC c -n
+int main()
+{
+  printf("hello org-mode\n");
+  return 0;
+}
+#+END_SRC
+\end{verbatim}
+#+END_LaTeX
+其中的-n可以设置行号，效果如下：
+#+BEGIN_SRC c -n
+int main()
+{
+  printf("hello org-mode\n");
+  return 0;
+}
+#+END_SRC
+
+除了上面列举的那些和文档内容有关的元数据，
+更多的元数据被用来设置org-mode的工作方式，
+比如设置导出行为之类的。
+如果你打开仓库中的.org文档，你会看到类似于
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+TITLE: An Emacs Tutorial for Vim User
+#+AUTHOR: w0mTea
+#+EMAIL: w0mT3a@gmail.com
+#+LATEX_CLASS: 
+#+LATEX_CLASS_OPTIONS:
+\end{verbatim}
+#+END_LaTeX
+的东西，这些都是不直接关乎内容的配置元数据。
+
+最后附加一句， org-mode中以#开始的行会被视为注释，
+如果想多行注释，可以用
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+BEGIN_COMMENT
+
+#+END_COMMENT
+\end{verbatim}
+#+END_LaTeX
+
 ** To-Do
 ** 标签
 ** 时间和日期
