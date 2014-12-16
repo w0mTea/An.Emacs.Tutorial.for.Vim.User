@@ -912,11 +912,137 @@ int main()
 #+END_COMMENT
 \end{verbatim}
 #+END_LaTeX
-
 ** To-Do
-** 标签
-** 时间和日期
+org-mode除了用来写文档以外，还可以用作你的todo-list。
+这里会说说org-mode中的todo。
+*** 基础
+todo项是org-mode中todo的基本元素。
+todo项是的样子和标题十分像，它其实就是以TODO关键字打头的标题，比如这样：
+ 
+ *** TODO 写代码
+
+在org-mode中，todo项会以彩色显示，十分醒目。
+
+todo项和标题一样，也是分级结构，并同样构成一颗树。
+
+有了todo项我们又能干什么呢？
+首先，我们可以通过分级来把大的目标分解成小目标，
+之后，我们可以通过org-mode提供的操作来完成todo-list的管理。
+下面用一个例子来说明哈
+
+假设w0mTea需要写一个c语言编译器，因此他列了这样一个todo-list：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器\\
+ ** {\color{red}TODO} 词法分析\\
+ ** {\color{red}TODO} 语法分析\\
+ ** {\color{red}TODO} 语义分析\\
+ ** {\color{red}TODO} 中间代码\\
+ ** {\color{red}TODO} 生成汇编\\
+ ** {\color{red}TODO} 产生二进制码\\
+\end{verse}
+#+END_LaTeX
+经过漫长的努力，w0mTea终于完成了词法分析和语法分析，
+因此他把光标分别移动到词法分析和语法分析那一行，按了 
+*C-c C-t* ，
+然后todo-list就成了这样：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器\\
+ ** {\color{green}DONE} 词法分析\\
+ ** {\color{green}DONE} 语法分析\\
+ ** {\color{red}TODO} 语义分析\\
+ ** {\color{red}TODO} 中间代码\\
+ ** {\color{red}TODO} 生成汇编\\
+ ** {\color{red}TODO} 产生二进制码\\
+\end{verse}
+#+END_LaTeX
+这里出现的C-c C-t就是用来切换todo状态的，在普通标题、todo、done三个状态间循环切换。
+
+w0mTea觉得这样看着不太直观，他需要直观的统计他的进度，因此他给todo项做了点改变：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 [/]\\
+\end{verse}
+#+END_LaTeX
+之后他在[]上按了
+*C-c C-c* ，
+成了这样：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 {\color{yellow}[2/6]}\\
+ ** {\color{green}DONE} 词法分析\\
+ ** {\color{green}DONE} 语法分析\\
+ ** {\color{red}TODO} 语义分析\\
+ ** {\color{red}TODO} 中间代码\\
+ ** {\color{red}TODO} 生成汇编\\
+ ** {\color{red}TODO} 产生二进制码\\
+\end{verse}
+#+END_LaTeX
+这里的加上的内容用于显示子内容的完成度，除了
+#+BEGIN_LaTeX
+\begin{verbatim}
+[/]
+\end{verbatim}
+#+END_LaTeX
+这样的格式外，还可以把/换成%用来显示百分比。
+之后的C-c C-c会刷新进度显示。
+
+现在w0mTea觉得爽多了，可是他还想搞得更直观一点，
+于是他把todo-list弄成了这样：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 {\color{yellow}[\%]}\\
+ ~~- [ ] 词法分析\\
+ ~~~~- [ ] 输入正则表达式\\
+ ~~~~- [ ] 构建nfa\\
+ ~~~~- [ ] nfa转dfa\\
+ ~~- [ ] 语法分析\\
+ ~~- [ ] 语义分析\\
+ ~~- [ ] 中间代码\\
+ ~~- [ ] 生成汇编\\
+ ~~- [ ] 生成二进制\\
+\end{verse}
+#+END_LaTeX
+之后在他已完成的输入正则表达式上按
+*C-c C-c* ，
+成了这样：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 {\color{yellow}[0\%]}\\
+ ~~- [-] 词法分析\\
+ ~~~~- [X] 输入正则表达式\\
+ ~~~~- [ ] 构建nfa\\
+ ~~~~- [ ] nfa转dfa\\
+\end{verse}
+#+END_LaTeX
+这个列表加[]的东东被成为checkbox，
+这里的C-c C-c是用来切换checkbox完成状态的。
+注意此时词法分析项上的状态是-，表明部分子项完成。
+
+w0mTea给词法分析也加上了进度框，于是：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 {\color{yellow}[33\%]}\\
+ ~~- [X] 词法分析 {\color{yellow}[3/3]}\\
+ ~~~~- [X] 输入正则表达式\\
+ ~~~~- [X] 构建nfa\\
+ ~~~~- [X] nfa转dfa\\
+ ~~- [X] 语法分析\\
+ ~~- [ ] 语义分析\\
+ ~~- [ ] 中间代码\\
+ ~~- [ ] 生成汇编\\
+ ~~- [ ] 生成二进制\\
+\end{verse}
+#+END_LaTeX
+*** 快捷键
+上面的例子里讲了一些最常用的用法，
+这里总结一下常用快捷键：
+- S-M-<RET>：插入todo项
+- C-c C-t：切换todo状态
+- C-c C-c：切换checkbox完成状态、刷新进度
 ** 日程
+** 时间和日期
 ** 导出
 <<org-mode-export>>
 ** 参考资料
