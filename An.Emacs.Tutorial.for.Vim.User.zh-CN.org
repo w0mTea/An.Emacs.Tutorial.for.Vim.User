@@ -1041,10 +1041,115 @@ w0mTea给词法分析也加上了进度框，于是：
 - S-M-<RET>：插入todo项
 - C-c C-t：切换todo状态
 - C-c C-c：切换checkbox完成状态、刷新进度
-** 日程
-** 时间和日期
 ** 导出
 <<org-mode-export>>
+上面写了一大堆，都只是纯文本的org文档而已，
+怎么才能导出成各种各样的其他格式呢？
+本节将会介绍一些常用格式的导出方法，更多的导出请参考org-manual
+*** 导出后端设置
+每一种导出格式都需要对应的导出后端，
+但不是所有的后端都默认启用，因此需要激活对应后端。
+默认启用的后端有ascii，html，icalendar和latex。
+
+在emacs中，
+*M-x customize <RET>*
+会进入配置模式，在搜索框中输入org-export-backend即可进入后端配置，如图：
+
+#+ATTR_LATEX: :float t
+#+NAME:customize 1
+[[file:images/customize1.png]]
+
+之后勾选想要的后端，去掉不想要的后端，如图：
+
+#+ATTR_LATEX: :float t
+#+NAME:customize 2
+[[file:images/customize2.png]]
+
+然后把光标移动到state按钮上按回车，
+选择0立即生效或1下次生效即可。
+
+#+ATTR_LATEX: :float t
+#+NAME:customize 3
+[[file:images/customize3.png]]
+*** 导出通用设置
+导出前，最好通过元数据对导出进行一些通用设置。
+使用
+*C-c C-e #* ，
+然后输入default，会自动插入通用设置模板，
+若输入特殊导出格式（比如html或latex），则会插入特殊模板。
+通用模板如下：
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:comment d:(not "LOGBOOK") date:t
+#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil prop:nil
+#+OPTIONS: stat:t tags:t tasks:t tex:t timestamp:t toc:t todo:t |:t
+#+TITLE: example
+#+DATE: <2014-12-17 三>
+#+AUTHOR: w0mTea
+#+EMAIL: w0mT3a@gmail.com
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.3.1 (Org mode 8.3beta)
+\end{verbatim}
+#+END_LaTeX
+
+下面，大概说说其中主要的一些选项：
+1. OPTIONS：
+   options中配置了许多行为，其中的选项用option:value的格式表示。
+   普遍来说，t表示启用，nil表示禁用，其他值表示具体的设置
+   - author：导出时显示作者
+   - date：导出时显示日期
+   - timestamp：导出时生成时间戳
+   - toc：导出时显示目录
+2. TITLE
+   文档的标题，默认情况下是文件名
+3. DATE
+   日期，默认情况下是插入选项模板时的日期
+4. AUTHOR
+   作者，默认和系统用户有关
+5. EMAIL
+   邮箱，默认和系统用户和系统hostname有关
+*** HTML
+导出成html可以使用
+*C-c C-e h* ，
+之后根据需要输入
+- h：导出成html文件
+- H：导出成html临时文件，在emacs中打开
+- o：导出成html并打开
+*** PDF
+导出成pdf需要有latex环境，否则生成的tex文件将无法编译。
+
+导出成pdf可以使用
+*C-c C-e l* ，
+之后根据需要输入：
+- L：导出成tex临时文件并打开
+- l：导出成tex文件
+- p：导出tex文件并生成pdf
+- o：导出tex文件，生成pdf并打开
+
+上面仅是导出成pdf的通用步骤，下面会说一些特殊的设置。
+**** 元数据设置
+**** 配置文件设置
+*** Markdown
+导出成markdown可以使用
+*C-c C-e m* ，
+之后根据需要输入：
+- M：导出成markdown临时文件并打开
+- m：导出成markdown文件
+- o：导出markdown文件并打开
+*** ODT
+odt是个啥子捏？这或就是开源的office格式，
+导出odt，再用libreoffice等软件打开转存，就可以转存成MS office格式。
+
+导出odt需要zip程序，使用前请确保已安装它。
+
+导出可以使用
+*C-c C-e o o* 
+来导出成odt文件。
 ** 参考资料
 <<org-mode-manual>>
 - org-mode manual:http://orgmode.org/manual/index.html
