@@ -363,7 +363,7 @@ emacs需要大量使用ctrl和alt两个键，但在大部分qwert键盘上，ctr
 本节主要介绍一些独力于具体语言之外的通用配置，
 如自动补全、版本控制、括号匹配等
 
-#+BEGIN_COMMENT:
+#+BEGIN_COMMENT
  - Autopair(补全括号插件)
  Autopair可以使用前文提到的el-get来安装启用。
  Autopair则需要以下代码来启动执行:
@@ -374,7 +374,7 @@ emacs需要大量使用ctrl和alt两个键，但在大部分qwert键盘上，ctr
  #+END_SRC 
 
 我觉得这一段还是放在这里好= =
-#END_COMMENT
+#+END_COMMENT
 ** C/C++
 写linux内核那帮家伙有不少都是用emacs的，
 emacs是c写的，
