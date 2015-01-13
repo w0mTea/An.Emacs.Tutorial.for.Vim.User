@@ -1,0 +1,1163 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:comment d:(not "LOGBOOK") date:t
+#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil prop:nil
+#+OPTIONS: stat:t tags:t tasks:t tex:t timestamp:t toc:t todo:t |:t
+#+TITLE: An Emacs Tutorial for Vim User
+#+AUTHOR: w0mTea
+#+EMAIL: w0mT3a@gmail.com
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE: zh
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.3.1 (Org mode 8.3beta)
+#+LATEX_CLASS: my-org-book-zh
+#+LATEX_CLASS_OPTIONS: [oneside]
+#+LATEX_HEADER_EXTRA:
+#+DATE: \today
+* 前言
+   写这篇教程的起因在于向许多vimer推荐org-mode时，
+   他们总是觉得虽然org-mode功能强大，可是使用emacs总是有着一些障碍。
+   作为一个同样从vim转向emacs的人，
+   我觉得或许分享我的经验可以让他们更快的接受emacs，从而体验emacs的美妙。
+
+   本文默认读者所使用的是类unix操作系统，
+   因此对于windows用户来说，如果某些操作在你的电脑上无法执行，请不必大惊小怪。
+** 为什么离开vim改用emacs
+   在绝大多数unix/linux教程都教我们用vi/vim的情况下，
+   许多人从开始就习惯了vim的一切：它的简洁、高效，它的模式，它简单直接的按键绑定……
+   于是就这样，一批批的vim用户诞生。
+   然而对于一直和vim并称的emacs，我们往往只是知道它很强，却不清楚它到底强在哪里。
+   如果你想清楚的了解这个vim的老对手到底凭什么能和vim分庭抗礼，
+   那么，你可以试着使用它。
+
+   如果你是一个lisp爱好者，那么你绝对不能错过emacs。
+   或许经过漫长的配置，vim同样可以很好的支持lisp，
+   可是在emacs上，lisp天然就可以被良好的支持。
+   同时，emacs也可以被lisp扩展。
+   因此，你写的每一行lisp代码，
+   或许都可以让你的emacs变的更好用。
+   写lisp，也是让我离开vim转向emacs的契机。
+
+   如果你厌倦了unix哲学，厌倦了做一件事只能用无数的小工具来组合；
+   或者你喜欢一个大而全的东西，可以帮你做各种各样的事情，
+   那么emacs无疑是一个更好的选择。
+   事实上，往往emacs用的越久，每天对着它的时间也越长，
+   它帮你做的事情也越超出简单的文本编辑。
+   从开始的写文档写代码，到收邮件玩游戏写幻灯片，
+   甚至到煮咖啡，emacs能帮我们做越来越多的事情。
+* emacs的安装
+  emacs并不像vim/vi那样几乎被所有类unix系统内置，
+  因此我们往往需要手动安装emacs。
+
+  对于有包管理器的系统，使用包管理器通常都可以成功安装emacs。
+  需要注意的是，某些发行版的仓库默认不安装emacs的GUI版本，
+  因此需要手动安装emacs-x11或类似名字的包。
+
+  需要注意的是，emacs的GUI版本并不是xemacs。
+  我们使用的emacs实际上是gnu emacs这个分支，
+  而xemacs则是另一个emacs的分支。
+  虽然xemacs和gnu emacs有着相当的兼容性，
+  可是在某些时候难免会碰到奇怪的问题。
+
+  对于没有包管理器或仓库没有emacs的系统，可以从
+  [[http://ftp.gnu.org/gnu/emacs/]]
+  下载。
+* 基础知识
+  毫无疑问，对于一个从未是用过vi/vim的人来说，
+  使用emacs并不是一个特别让人困惑的事，
+  最起码开始不是，因为emacs和他之前用过的任何文本编辑器（比如windows下著名的notepad）
+  从表面上看并没有太大的不同。
+  然而对于习惯了vi/vim模式操作的人来说，这样的操作模式真是让人无比烦恼：
+  如果不使用一系列快捷键，效率就会变的无比低下；
+  可是如果使用快捷键……那都是什么鬼东西！
+
+  为了让我们可以更快的接受emacs，我们需要了解一些最最基础的东西。
+  这些知识并不繁琐，但却总是有很大的帮助
+** 快捷键的约定
+   由于没有vim那样的模式之分，emacs的快捷键总是需要使用组合键。
+   可是网上查到的C-n， C-x C-s都是啥意思呢？
+
+   emacs中，快捷键的表示都遵循了一些固有的约定。
+   C-x表示同时按着ctrl和x，
+   C-x C-s表示先按ctrl+x，然后按ctrl+s。
+   当然，也可以按着ctrl不放，然后依次按x和s咯。
+
+   同样的，还有M-系列的快捷键和S-系列的快捷键。
+   M-x表示同时按alt和x（alt在不同键盘上可能不同，有可能也叫meta之类的）。
+   S-x表示同时按shift和x。
+   在这样的约定里，还有一些其他的特殊键，比如ESC、RET（回车）等
+** 常用快捷键
+   这里列举一些最最简单同时也最最常用的快捷键。
+   #+ATTR_LATEX: :align |c|c|c|
+   |---------+--------------------|
+   | 快捷键  | 功能               |
+   |---------+--------------------|
+   | C-x C-f | 打开某文件         |
+   | C-g     | 取消正在输入的命令 |
+   | C-x C-c | 关闭emacs          |
+   | C-x C-s | 保存当前文件       |
+   | M-x     | 运行命令               |
+   |---------+--------------------|
+* 简单配置
+  emacs采用emacs lisp作为配置语言，
+  因此在配置里看到大堆的括号请不要惊讶。
+  通常来说emacs的配置文件以及各种插件都以.el为后缀名。
+
+  emacs的启动文件（类似于vim的.vimrc）可以是下列三个中的一个：
+  - ~/.emacs
+  - ~/.emacs.el
+  - ~/.emacs.d/init.el
+
+  虽然说使用哪一个配置文件都可以，可是我还是建议使用最后一种。
+  因为这种方案下，你可以把emacs相关的所有配置都放在.emacs.d这个文件夹下，
+  而不是零散的东堆西散。
+  尤其在你的配置文件变的很大的时候，你可以轻松的把启动文件中乱七八糟的配置代码拆分成单独的模块，
+  每个模块单独占有一个文件，并且统一放在这个文件夹里。
+
+  另外，下文提到的[[package-management][包管理]]中，最好也把其相关文件放在.emacs.d文件夹下。
+
+  至于具体的配置，可以根据自己的需求来弄。[[documents][后文]]会提供一些好的站点帮助大家完成自己的配置文档。
+  而一些简单的配置，会在后面的内容里提到。
+* 过渡——evil-mode
+  对于刚接触emacs的vimer来说，最难习惯的估计就是光标移动了。
+  如果还能像vim那样操作无疑会愉快的多。
+  而像vim一样操作emacs并不是你一个人的想法，因此早就有别的高手实现了这一功能，
+  那就是evil-mode。
+  
+  注：在下文中，配置代码在pdf中有可能无法复制，
+  如果不想手打可以参考emacsWiKi：[[http://www.emacswiki.org/emacs/el-get]]
+** 安装
+   emacs有着若干种安装扩展的方法，具体的会在下一节讲到。
+   这里只讲一种我最常用到的也是感觉最方便的方法：el-get安装。
+   
+   在你的配置文件中加入下列部分：（需要注意的是，el-get的默认位置也在.emacs.d文件夹内）
+#+BEGIN_SRC lisp
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil t)
+  (url-retrieve
+   "https://github.com/dimitri/el-get/raw/master/el-get-install.el"
+   (lambda (s)
+     (end-of-buffer)
+     (eval-print-last-sexp))))
+
+;; now either el-get is `require'd already, or have been `load'ed by the
+;; el-get installer.
+
+;; now set our own packages
+(setq
+ my:el-get-packages
+ '(el-get				; el-get is self-hosting
+   switch-window			; takes over C-x o
+   auto-complete			; complete as you type with overlays
+   zencoding-mode			; http://www.emacswiki.org/emacs/ZenCoding
+   color-theme		                ; nice looking emacs
+   color-theme-tango))	                ; check out color-theme-solarized
+
+;
+;; Some recipes require extra tools to be installed
+;;
+;; Note: el-get-install requires git, so we know we have at least that.
+;;
+(when (el-get-executable-find "cvs")
+  (add-to-list 'my:el-get-packages 'emacs-goodies-el)) ; the debian addons for emacs
+
+(when (el-get-executable-find "svn")
+  (loop for p in '(psvn    		; M-x svn-status
+		   yasnippet		; powerful snippet mode
+		   )
+	do (add-to-list 'my:el-get-packages p)))
+
+(setq my:el-get-packages
+      (append my:el-get-packages
+              (mapcar #'el-get-source-name el-get-sources)))
+
+;; install new packages and init already installed packages
+(el-get 'sync my:el-get-packages)
+#+END_SRC
+上述代码段会自动检查是否安装了el-get，并自动在未安装的情况下安装。
+注意，这段代码需要系统中安装过git才能运行。同时为了在安装其他扩展时不会出问题，
+建议安装svn或cvs。
+把上述代码段保存后，重新运行emacs，就会自动安装el-get
+
+el-get安好了，那么怎么安装evil-mode呢？回到上面那段代码，可以看到
+#+BEGIN_SRC lisp
+;; now set our own packages
+(setq
+ my:el-get-packages
+ '(el-get				
+   switch-window			
+   auto-complete			
+   zencoding-mode			
+   color-theme		                
+   color-theme-tango))	                
+#+END_SRC
+只要在这段代码内添加上我们想要的扩展，而且这个扩展恰好在el-get的仓库内，
+那么我们就可以自动的安装并启用对应扩展。
+大多数常见扩展都可以被el-get自动找到，evil-mode也不例外。
+因此只要在这段代码中加上evil-mode就可以。搞定后和下面的差不多：
+#+BEGIN_SRC lisp
+(setq
+ my:el-get-packages
+ '(el-get				
+   switch-window			
+   auto-complete			
+   evil-mode
+   zencoding-mode			
+   color-theme		                
+   color-theme-tango))	                
+#+END_SRC
+之后重启emacs，就可以安装了。
+** 启用
+安装成功后，只需要在配置文件中加入
+#+BEGIN_SRC lisp
+(require 'evil)
+(evil-mode 1)
+#+END_SRC
+就可以全局启用evil-mode。
+如果想手动启动evil-mode，把上面的1改成0，
+在需要启动的时候按M-x evil-mode RET即可。
+
+现在，vim熟悉的操作，不就回来了吗？
+* emacs中的包管理
+  <<package-management>>
+  在上一章，我们已经使用了el-get来安装扩展。
+  只需要在列表中加入你需要的包名就可以自动安装，岂不是爽的很？
+  这一节会介绍一些el-get的其他用法。
+
+  不幸的是，并不是所有的软件包都可以通过el-get安装，
+  因此还需要介绍一些其他方法来弥补这一小小的缺陷。
+** el-get
+*** 安装
+除了之前提到的配置文件中加入包名的方法。
+除此之外还可以在emacs中实时安装扩展。
+
+*M-x el-get-install RET* 
+并在出现的 *Package install* 中输入想要的包名即可安装。
+注意：打包名时要善用tab补全哦，不仅可以省事，还可以检查是否打错以及该包是否在el-get的仓库内。
+
+el-get安装的扩展包会被记录在一个文件中，无论通过哪一种方式安装扩展，
+所以是否加入包名到配置文件并不会影响使用。
+但是我仍建议仍加入到配置文件中的包列表中去，
+因为那样在其他环境需要安装时，
+你只需要复制你的配置并运行emacs即可安装所有之前安装过的插件。
+但若是实时安装的插件没有加入配置，在更换环境时会遗漏一些东西。
+
+注：在更换环境时把整个.emacs.d文件夹拷贝过去也可以避免遗漏实时安装的插件。
+*** 更新
+*M-x el-get-self-update RET* 即可更新el-get
+
+*M-x el-get-update RET* 再输入包名即可更新选定包。
+
+*M-x el-get-update-all RET* 即可更新安装记录中所有已安装的包。
+注，网速慢慎用，可能会被更新信息刷屏好久
+*** 删除
+删除包列表中要删除的包名，使用
+*M-x el-get-remove RET* 再输入包名即可。
+*** recipe文件
+<<recipe>>
+el-get使用一系列的recipe文件来处理安装包。
+每一个recipe文件都描述了安装包的名字、下载地址、版本、安装后的初始化动作等信息。
+这些recipe文件就相当于包管理器的软件源元数据，
+我们查询、安装等操作都需要用到它。
+
+默认情况下，recipe文件放在.emacs.d/el-get/el-get/recipes文件夹下。
+
+对于el-get默认没有的扩展，一个安装方法便是自己写一个简单的recipe文件。
+具体的做法可以参考emacsWiKi el-get页。
+
+另外，对于发布在emacsWiKi上的插件，可以使用
+*M-x el-get-emacswiki-refresh* 来获取/刷新其recipe文件。
+因此如果要安装的包列在了emacsWiKi上，那么就不用自己麻烦的去安装啦。
+*** 本节参考资料
+本节仅列出了少数用法，更多用法请参考下列网站：
+- EmacsWiKi: [[http://www.emacswiki.org/emacs/el-get]]
+- Github: [[https://github.com/dimitri/el-get/]]
+** ELPA
+ELPA也是一个emacs的包管理工具，在emacs24及以上版本已经默认集成(package.el)。
+*** 简单配置
+ELPA需要添加一些仓库源，如下：
+#+BEGIN_SRC lisp
+(require 'package)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+#+END_SRC
+这样就会添加gnu官方源、marmalade、melpa三个源。
+
+在某些情况下，启动emacs时会显示package.el没有被初始化，可以通过加入下列代码在启动文件的非末尾位置解决：
+#+BEGIN_SRC lisp
+(setq package-enable-at-startup nil)
+(package-initialize)
+#+END_SRC
+*** 安装/删除/升级
+1. *M-x list-packages RET* 会列举所有包。通过 *C-s xxx* 可以快速找到你想安装的包
+2. 光标移动到对应包名上，按：
+   - RET：会显示包的介绍
+   - i：标记该包为待安装
+   - u：取消标记
+   - d：标记为待删除
+   - U：标记为待升级。只有可升级的包才可被标记
+   - x：执行，会删除d标记的包，安装i标记的包
+   - r：刷新列表
+   - q：退出列表
+*** 本节参考资料
+- EmacsWiKi：http://www.emacswiki.org/emacs/ELPA
+- ergoEmacs：http://ergoemacs.org/emacs/emacs_package_system.html
+** 手动安装
+有些时候，会有一些冷门的包或者自己写的包无法在前面讲过的仓库里找到，
+而你也不想写el-get的recipe或者elpa的本地仓库，
+那么就会用到本节的知识。
+
+首先，你需要让emacs可以找到你的扩展文件。假如你的文件在
+*~/Documents/emacs-package* 目录下，那么在配置中加入：
+#+BEGIN_SRC lisp
+(add-to-list 'load-path "~/Documents/emacs-package")
+(load "you-package") ;.el后缀最好省略
+#+END_SRC
+这样就可以启用你的扩展了。
+
+由于手动安装有着诸多不便，而且使用也较为少，
+因此这里仅列出最基本的用法。更复杂的用法，请见：
+- ergoEmacs：http://ergoemacs.org/emacs/emacs_installing_packages.html
+* 保护你的手指
+emacs需要大量使用ctrl和alt两个键，但在大部分qwert键盘上，ctrl的位置都在很难按到的角落里。
+据说，如果长期使用小指按角落的ctrl会很容易导致手部健康出现问题。
+因此，我专门加入了这一章来列举一些常用的方法来避免ctrl和alt位置不当带来的伤害。
+** 用手掌外缘按ctrl
+由于许多键盘中ctrl处于左下角，所以可以把左手外翻向左下角压去，这样就可以按到ctrl。
+- 优点：简单，不需要特别的准备
+- 缺点：笔记本键盘很难用，按着ctrl时左手几乎无法按其他任何键
+- 推荐度： 2/5
+** 改键
+仔细观察，不难发现我们的键盘上总有一些位置很黄金却很少用到的键，
+这之中典型的例子之一caps lock键。
+因此，我们不妨更改键位设置，把使用频度更高的键更换到这些位置上。
+
+一些常用的改键方案包括：
+1. 左ctrl和caps lock交换：似乎是网上流传最广的改键方法
+2. 右alt和右ctrl交换：这种改法最适合空格两边都是alt的键盘，这样大拇指稍稍移动就可以按到ctrl和alt
+
+改键方法视具体环境不同而有所不同。
+在windows下，可以使用各种改键软件完成这一工作。
+在*nix下，对于使用xorg的用户来说也可以使用xmodmap。
+如果使用DE，那么很有可能在设置中心内也有调整键盘布局的选项。
+
+- 优点：效果不错，可以根据自己的情况自由配置
+- 缺点：需要自己进行一些准备；偶尔使用被改的冷门键可能会不方便
+- 推荐度： 4/5
+** 踏板
+有一类被称为踏板的神奇道具，可以定义踩下时发出的按键信号，
+这类踏板用于emacs那真真是极好的，可以极大的减轻手部负担。
+
+- 优点：简单方便，效果超群，直接减少手的工作量
+- 缺点：相比上面的方法来说最贵；不同系统驱动可能有潜在问题
+- 推荐度：3/5
+* 编程语言配置
+几乎可以肯定，emacs用户中程序员占了大多数，
+因此没有相应配置怎么能行？
+本章会列举一些常用的语言的用到的常用扩展以及简单配置，
+更具体的配置请参照emacsWiKi上仔细进行。
+** 通用配置
+本节主要介绍一些独力于具体语言之外的通用配置，
+如自动补全、版本控制、括号匹配等
+
+#+BEGIN_COMMENT
+ - Autopair(补全括号插件)
+ Autopair可以使用前文提到的el-get来安装启用。
+ Autopair则需要以下代码来启动执行:
+ #+BEGIN_SRC lisp 
+ (show-paren-mode t) ;; 匹配括号高亮 
+ (require 'autopair)
+ (autopair-global-mode) ;; 自动补全括号
+ #+END_SRC 
+
+我觉得这一段还是放在这里好= =
+#+END_COMMENT
+** C/C++
+写linux内核那帮家伙有不少都是用emacs的，
+emacs是c写的，
+GNU的许多东西是c写的，
+所以emacs默认就可以不错的支持C，
+而C/C++的相关插件堪称多如牛毛……
+这里仅列出一些常用插件，
+大家可以一一尝试，选择最复合自己习惯的。
+*** 缩进
+写代码，缩进搞不好，心情绝对好不了，这里就写写emacs中的c的缩进。
+*** 各种扩展
+** Python
+似乎每一个流行的语言在emacs都有一大堆的插件可以使用，
+因此怎么选择这堆插件往往让人头疼。
+本章会尽量详细的介绍一些主流插件的特点以便各位选择，
+同时给出一些小而好用的插件。
+
+最常见的python扩展就是emacs24.2以上自带的python.el和需要自己安装的python-mode.el。
+下面会分别说说这两个插件
+*** python.el
+python.el默认包含在了emacs24.2以上的版本内。
+如果想要确保自己使用的是最新的python.el，可以使用el-get安装。
+安装时会发现有python和python24两个选项，其中python24是一个分支版本，更稳定却没有加入新的特性。
+*注意，* 如果你正在使用emacs24.4或以上的版本，还需要同时安装cl-lib。
+
+python.el支持许多特性，包括但不限于：
+- 自动检测缩进
+- 内置python shell（支持python2和3）
+- python shell补全
+- 支持调试利器PDB
+- S-exp类似的移动方式
+
+解释执行类语言著名的REPL（Read-Evaluate-Print-Loop）怎么可以不能在emacs里实现呢？
+
+在写完python代码后，输入 *C-c C-c*
+就可以执行整个文件的内容，
+选中部分代码后使用 *C-c C-r*
+就可以执行选中部分（选中可以用鼠标拖动，用evil-mode可以按v，不用evil-mode可以按着shift移动光标）。
+
+默认情况下，python.el会使用python来执行你的代码。但是你也可以使用iPython，方法如下：
+1. 在未启动python解释器时使用C-c C-c等命令会让你输入解释器路径，此时可以输入iPython的路径来启动iPython
+2. 设置如下代码
+#+BEGIN_SRC lisp
+(setq
+ python-shell-interpreter "ipython"
+ python-shell-interpreter-args ""
+ python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+ python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+ python-shell-completion-setup-code
+   "from IPython.core.completerlib import module_completion"
+ python-shell-completion-module-string-code
+   "';'.join(module_completion('''%s'''))\n"
+ python-shell-completion-string-code
+   "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+
+#+END_SRC
+
+下面来个例子：
+#+ATTR_LATEX: :float t
+[[file:./images/python-repl-sample0.png]]
+*** python-mode.el
+python-mode需要自己安装，可以通过el-get来搞定。
+安装后，打开.py文件就会自动加载python-mode。
+
+python-mode可以很容易的更改使用其他python解释器，下面以ipython为例：
+#+BEGIN_SRC lisp
+;python mode
+(require 'python-mode)
+;use IPython
+(setq-default py-shell-name "ipython")
+(setq-default py-which-bufname "IPython")
+#+END_SRC
+
+在python-mode里如何进行REPL呢？
+很简单，在写了python代码后，你可以
+1. 选中你要执行的代码块
+   点击工具栏的python标签，点Execute Region，就可以看到结果啦（这个动作可以用快捷键搞定）
+2. 点工具栏的python标签，点Execute Buffer，会把整个文件执行一遍（同样可以快捷键搞定）
+附一张实例图（这里使用的ipython）：
+
+#+NAME:python-repl-sample
+[[./images/python-repl-sample.png]]
+
+基于python-mode可以构建一个python的IDE，这个有视频演示（需翻墙）：
+http://www.youtube.com/watch?v=0cZ7szFuz18If
+*** 便利的小插件
+**** Jedi
+Jedi是一个python补全库，可以为python提供快速而准确的补全，而且可以被各种工具使用（不仅限于emacs）。
+而emacs中基于Jedi的补全插件就有好几种，这里就说说Jedi.el
+
+安装Jedi.el很简单，通过el-get或ELPA都可以搞定。同时需要安装Jedi库（包管理器或者https://github.com/davidhalter/jedi）
+
+需要注意，jedi对python.el的支持更好，在python-mode下可能会有一些问题。
+*** 参考资料
+本节涉及到的插件以及插件组合过多，难免有所遗漏谬误，
+因此建议各位如有疑惑，不要忘了查询下列资料：
+- EmacsWiKi：http://www.emacswiki.org/PythonProgrammingInEmacs
+- EmacsWiKi：http://www.emacswiki.org/emacs/ProgrammingWithPythonModeDotEl
+- PythonWiki：https://wiki.python.org/moin/EmacsEditor
+- python.el main page：https://github.com/fgallina/python.el
+
+** Lisp
+** Perl
+** Ruby
+** Markdown
+*** 插件及安装
+ # Markdown在emacs中启用需要下载一个[[http://jblevins.org/projects/markdown-mode/markdown-mode.el][Emacs lisp文件]]
+ # 将这个文件放入emacs配置文件夹就可以了。
+ # Comment by w0mTea：这个插件在emacswiki上有，所以可以直接用el-get安装了
+
+ Emacs有markdown-mode来提供对markdown的支持。此插件可以通过el-get安装。
+ 若el-get无法找到此插件，记得同步emacsWiKi源（[[recipe][方法见此]]）
+
+ # 接着将以下代码写入emacs配置文件,以后打开.md or .markdown文件都会自动启用高亮。
+ # ;;;MarkDown                                                                                                               
+ # (add-to-list 'load-path "~/.emacs.d/modes")
+ # (autoload 'markdown-mode "markdown-mode.el"
+ #     "Major mode for editing Markdown files" t)
+ # (setq auto-mode-alist
+ #    (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+ # (setq auto-mode-alist
+ #    (cons '("\\.md" . markdown-mode) auto-mode-alist))
+ # 
+ # (setq linum-format "%d ") ;set format 
+ # Comment by w0mTea：上面的配置都被el-get做过了，所以就不用再写了
+
+ 安装后，打开.md或.markdown文件时会自动加载markdown-mode并提供高亮支持。
+*** 配置
+如果你常写markdown，那么对markdown文件强制进行一些静态语法检查是十分有用的。
+举个例子，在链接中大量使用的方括号和圆括号很容易被遗漏掉后半边。
+因此我们可以要求emacs检查括号：
+#+BEGIN_SRC lisp
+ (add-hook 'markdown-mode-hook
+            (lambda ()
+              (when buffer-file-name
+                (add-hook 'after-save-hook
+                          'check-parens
+                          nil t))))
+#+END_SRC
+*** 另一种写Markdown的方式
+其实还有一种更省事也更好用的写markdown的方法，那就是用org-mode导出生成。
+想了解更多的读者可以看[[org-mode][重量级应用——org-mode]]以及[[org-mode-export][org-mode导出]]的markdown部分。
+** Java
+事实证明，如果需要写java，请出门左转eclipse或出门右转intellij……
+emacs写java并不是一个很好的选择，而且相关插件开发的人也是寥寥无几，
+毕竟把emacs弄到eclipse或intellij那样好用绝对是一个艰难的事，
+所以广大的emacser都机智的选择了上述两种IDE之一。
+
+* 重量级应用——org-mode
+<<org-mode>>
+org-mode是啥呢？它是一个很强大的东西，
+可以快速高效的通过纯文本文件来完成做笔记、TO-DO list、项目计划等一系列事情。
+它有些类似vim下的vimwiki和markdown，但比前两者强大的多。
+
+用org-mode写文档类的东西，你需要关注的只有你的文档的结构和内容，
+而其他的，都有org-mode帮你搞定，毫无疑问，这是一种相当爽的感觉。
+而且org-mode写完后，可以轻松的导出成各种格式：html、markdown、
+pdf、odt（进而通过libreoffice等转换成MS Office格式）、beamer等等。
+或许你已经猜到了，你正在看的这个pdf，也是org-mode生成的。相信如果没有org-mode，
+我是不会有勇气开始写这个文档的。
+
+由于org-mode的内容十分多，多到即使我再写一年也未必写的全的程度，
+所以我只能写一些基本的用法并给出一些参考资料，大家若有需要，可以查阅[[org-mode-manual][org-mode资料]]。
+** 安装
+Emacs23之后已经默认包含有org-mode了，但是默认包含的版本往往比较低，因此建议安装一个新的org-mode。
+安装方法如[[package-management][包管理]]部分所讲那样，可以用el-get安装，也可以用ELPA安装，也可以手动安装，这里就不多说了。
+
+安装成功后，使用emacs打开任意一个后缀名为.org的文件就会自动启动org-mode了。
+** 文档结构
+*** 标题
+文档结构的骨架就是一级级标题组成的树状结构，这里就来说说标题。
+
+org-mode里标题的表示十分简单，*表示标题，几个*就是几级标题。
+需要注意的是，星号后需加一个空格。
+每次手打星号其实是很烦人的事，因此org-mode给出了一些快捷键帮我们搞定：
+- C-<RET>：插入一个同级标题。也就是说，上一个标题是二级标题的话，这个快捷键也会插入二级标题哦
+- M-<RET>：插入一个同级同类标题。这个和C-RET基本一样，一些细微的区别会在[[plain-list][列表]]部分给出
+*** 折叠循环
+当文档写长以后，就会有无从下手的感觉，可是通过良好的折叠，
+可以让我们仅面对少部分内容，并且可以清楚的看到文档的结构，
+为此org-mode提供了一系列折叠功能。
+
+在一个标题上按 *TAB* ，这个标题之下的内容都折叠起来，只留下标题。
+在标题上按TAB，所执行的操作是一个循环，如图：
+
+#+ATTR_LATEX: :float t
+#+NAME: tab-cycle
+#+BEGIN_SRC ditaa :file images/cycle.png
+/--------\     /---------\     /----------\
+| folded | --> | subtree | --> | show all | --\
+\--------/     \---------/     \----------/   |
+    ^                                         |
+    |                                         |
+    \-----------------------------------------/
+#+END_SRC
+
+除了在标题上按TAB外，还可以使用
+*S-TAB* 或者 *C-u TAB* 来完成全局折叠。
+多次按此快捷键也是循环操作，依次在总览、各级标题和所有内容间切换，如图：
+
+#+ATTR_LATEX: :float t
+#+BEGIN_SRC ditaa :file images/cycle-global.png
+/----------\     /---------\     /----------\
+| overview | --> | content | --> | show all | --\
+\----------/     \---------/     \----------/   |
+     ^                                          |
+     |                                          |
+     \------------------------------------------/
+#+END_SRC
+
+这里仅列举的最基础的用法，更多用法请见参考资料。
+
+*** 标题的结构化操作
+文档规模上去以后，经常需要以子树为单位在结构上进行一些操作，
+因此org-mode提供了一些结构化操作来帮助我们。
+1. 标题间移动
+   - C-c C-n：下一个标题
+   - C-c C-p：上一个标题
+   - C-c C-f：下一个同级标题。只会在同子树的标题间移动
+   - C-c C-b：上一个同级标题。只会在同子树的标题间移动
+   - C-c C-u：上一级标题
+   - C-c C-j：保持当前位置不变的跳转。使用该指令后，会打开搜索，输入内容即可找到对应位置。浏览完后，按C-g就可以退出浏览状态，回到原位置
+2. 结构化编辑
+   - M-<left>：当前标题升级
+   - M-<right>：当前标题降级
+   - M-S-<left>：当前子树升级
+   - M-S-<right>：当前子树降级
+   - M-S-<up>：当前子树上移
+   - M-S-<down>：当前子树下移
+** 列表
+<<plain-list>>
+org-mode中的列表分为有序和无序两种。
+有序的列表以"1."这样的形式开始，
+无序的列表以* + 或者 - 开始。
+
+需要注意的是：
+1. 需要在列表符号后加上空格才能生效
+2. 有序列表中的数字可以随便写
+3. 无序列表用哪个符号不影响最终显示结果
+4. 用*来开始无序列表，那所在行必须有缩进，否则会被认为是标题
+5. 列表可以嵌套，用缩进来表示层级
+
+列表同样可以使用结构化操作。
+一些细微的不同在于，列表的子树上下移动不是M-S-xx而是M-xx。
+
+除此之外，针对列表还有一些新的操作：
+- C-c -：转换列表符号，会在有序、无序各符号间循环切换
+- C-c *：把列表项转换为标题
+- C-c ^：给当前列表排序
+** 表格
+org-mode中还提供了强大的表格功能。
+*** 基础
+新建表格很简单，只要在新的一行连着打两个或多个|就好啦。
+只需要在|之间填上内容就ok。
+
+每次想弄出新的格子都得打|，这多麻烦呀。
+其实org-mode提供了简单的操作。
+在第一行的|已经弄好的情况下，在格子内按TAB就会自动跳到下一个格子，
+如果这个格子已经是行尾了，则会自动在下一行自动补齐以整行表格。
+下面是一个例子：
+#+BEGIN_LaTeX
+\begin{verbatim}
+| 1 | 2 | 3 |
+在3里按TAB后
+| 1 | 2 | 3 |
+|   |   |   |
+\end{verbatim}
+#+END_LaTeX
+在表格里按TAB，还有自动对齐表格的功能（注：表格里如果有中文，对齐往往会出问题，
+这是中文和英文显示大小不一造成的，可以通过设置emacs的显示字号来笨笨的解决这一问题），
+所以多按TAB，不仅省事还整齐啊。
+
+除了按TAB可以横向移动以外，按RET也可以向纵向移动。
+
+如果想在上下两栏间插入分割线，可以按 *C-c -*
+*** 计算
+org-mode表格还提供了计算的功能。
+
+设想这样一个情景，你需要做一个简单的统计，
+给出物品的单价和数量，算出总金额，如何让org-mode帮做这个计算呢？请看例子：
+#+BEGIN_LaTeX
+\begin{verbatim}
+| 单价 | 数量 | 总额   |
+|------+------+--------|
+|   10 |   10 | =$1*$2 |
+\end{verbatim}
+#+END_LaTeX
+这样，在表格中按tab就会自动计算出结果了。其中$1表示第一列，$2表示第二列 。
+
+可是这样需要手动给每一个需要计算的格子打上公式，还是很麻烦，能不能批量的计算呢？
+当然可以啦。在表格下面加上这句话：
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+TBLFM: $3=$1*$2
+\end{verbatim}
+#+END_LaTeX
+
+在需要进行全表格计算的时候，在上面那句话上按 *C-c C-c* 就可以看到结果啦
+
+如果想要知道某一列所有数的和呢？在那一列上，按 *C-c +*
+就会算出结果，并且可以直接粘贴。
+*** 快捷键
+这里仅罗列一些常用快捷键哈：
+- C-c |：插入表格
+- C-c C-c：在表格内是对齐表格，在上面说的那句话上是计算表格
+- <TAB>：移到下一格
+- S-<TAB>：移到上一格
+- <RET>：移到下一列
+- M-a：移到一格的头部
+- M-e：移到一格的尾部
+- M-<left>/M-<right>：把一列左移/右移
+- M-S-<left>/M-S-<rigth>：删除一列/插入一列
+- M-<up>/M-<down>：一行上移/下移
+- M-S-<up>/M-S-<down>：删除一行/插入一行
+- C-c -：插入水平分割线
+- C-c +：计算一列之和
+- C-c ^：排序
+** 链接
+<<link>>
+就像html一样，org-mode提供了丰富的链接功能。
+
+链接的基本格式如下：
+#+BEGIN_LaTeX
+\begin{verbatim}
+[[link][description]] 或 [[link]]
+\end{verbatim}
+#+END_LaTeX
+其中link是要链接的东东，description是描述。
+
+上面的两个链接出来的样子是这样的：
+[[link][description]] 或 [[link]] 
+*** 内部链接
+如果你的链接不像一个url，那么org-mode会把它按内部链接处理。
+上面例子中的链接会链接到本节，为什么呢？因为我在这一节内加了一个锚点：
+#+BEGIN_LaTeX
+\begin{verbatim}
+<<link>>
+\end{verbatim}
+#+END_LaTeX
+这样点击链接就会找到这个锚点并跳转过去了。
+*** 外部链接
+org-mode支持各种各样的外部链接，这里仅列出几个常用的，
+全部的链接支持在这里：[[http://orgmode.org/manual/External-links.html#External-links][org-mode手册]]
+#+BEGIN_LaTeX
+\begin{verbatim}
+http://xxxxx
+file:path/to/some/file
+path/to/some/file
+\end{verbatim}
+#+END_LaTeX
+** 代码块
+org-mode还提供了非常非常强大的代码块功能，除了基础的显示代码的功能以外，
+还有诸多花式玩法（本文档里的[[tab-cycle][图]]就是用org-mode的代码块写出来的哦）。
+这一节只说说基础用法和一些简单的花式（比如说画图），更复杂的玩法可以去org-manual好好看看哈。
+*** 基本用法
+插入代码块的方法很简单哈，如下：
+
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+BEGIN_SRC c
+#+END_SRC
+\end{verbatim}
+#+END_LaTeX
+之后在BEGIN和END之间按C-c '
+即可进入代码块编辑模式，
+输入完毕后再按C-c '即可退出编辑模式。
+注意，有时候使用上述快捷键时显示此快捷键未定义，
+很可能是你正在使用汉字输入法导致的， 切换输入法即可。
+
+来一段效果展示：
+#+BEGIN_SRC c 
+  #include<stdio.h>
+  int main()
+  {
+      printf("hello org-mode!\n");
+  }
+#+END_SRC
+
+注意需要在BEGIN\(\_\)SRC后加上语言名字，以使用该语言特有的语法高亮缩进之类的。
+每次都打带#的一长串东西多烦人啊，因此org-mode提供了快捷键：
+输入<s并在上面按<TAB>，看看有没有惊喜？
+*** 画图
+org-mode的代码块可以调用ditaa来画图，对于一些简单的图来说只需要用org-mode就能搞定啦~
+
+org-mode需要使用ditaa来完成字符画，这个东西已经内置，所以不需要再下载。
+另外，ditaa需要java环境支持。
+
+在使用前，需要对emacs做一个小设置：
+#+BEGIN_SRC lisp
+; org-mode ditaa setup
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ditaa . t)))
+#+END_SRC
+
+现在就可以用ditaa画图啦。
+ditaa有不少特性，这里仅给出一些简单的例子，
+更有意思的大家可以去它的官方看哈，网址[[http://sourceforge.net/projects/ditaa/]]
+
+还记得上面的tab循环吗？其实它的源码是这样的
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+BEGIN_SRC ditaa :file images/cycle.png
+/--------\     /---------\     /----------\
+| folded | --> | subtree | --> | show all | --\
+\--------/     \---------/     \----------/   |
+    ^                                         |
+    |                                         |
+    \-----------------------------------------/
+#+END_SRC
+\end{verbatim}
+#+END_LaTeX
+
+再来一个例子：
+#+BEGIN_LaTeX
+\begin{verbatim}
+,#+BEGIN_SRC ditaa :file images/state-machine.png
+/-------\  int/char   +---------+ 
+| start | --------->  | declar0 | 
+\-------/ /--------   +---------+ 
+   |      |              ( |      
+   |      |                v      
+   |      | void      +---------+ 
+   |      |           |  func   | 
+   |      |           +---------+ 
+   |      |           void | ^    
+   |      |                v | (     
+   |      |            +-----------+ 
+   \------\----------> |   void    | 
+      void             +-----------+
+                             | main
+                             |
+           /-----------\     |
+           |   main    |<----/
+           \-----------/
+#+END_SRC
+\end{verbatim}
+#+END_LaTeX
+
+其效果如下：
+
+#+ATTR_LATEX: :float t
+#+BEGIN_SRC ditaa :file images/state-machine.png
+/-------\  int/char   +---------+ 
+| start | --------->  | declar0 | 
+\-------/ /--------   +---------+ 
+   |      |              ( |      
+   |      |                v      
+   |      | void      +---------+ 
+   |      |           |  func   | 
+   |      |           +---------+ 
+   |      |           void | ^    
+   |      |                v | (     
+   |      |            +-----------+ 
+   \------\----------> |   void    | 
+      void             +-----------+
+                             | main
+                             |
+           /-----------\     |
+           |   main    |<----/
+           \-----------/
+
+#+END_SRC
+** 元数据
+上面已经出现过了诸如
+#+BEGIN_LaTeX
+\#+BEGIN\_SRC
+#+END_LaTeX
+这样的形式，其实这样的东东有一个特殊的名字，叫做元数据。
+这些元数据不会直接出现在文档中，而是起了各种各样的作用。
+这里我将会列举一些常用的元数据及其快捷键，
+更多的元数据的用途后面会陆续加入。
+
+#+BEGIN_LaTeX
+\begin{verbatim}
+s    #+BEGIN_SRC ... #+END_SRC 
+e    #+BEGIN_EXAMPLE ... #+END_EXAMPLE  
+q    #+BEGIN_QUOTE ... #+END_QUOTE      
+v    #+BEGIN_VERSE ... #+END_VERSE      
+c    #+BEGIN_CENTER ... #+END_CENTER 
+l    #+BEGIN_LATEX ... #+END_LATEX 
+L    #+LATEX: 
+h    #+BEGIN_HTML ... #+END_HTML 
+H    #+HTML: 
+a    #+BEGIN_ASCII ... #+END_ASCII 
+A    #+ASCII: 
+i    #+INDEX: LINE 
+I    #+INCLUDE: LINE
+\end{verbatim}
+#+END_LaTeX
+上面的缩写前加上<在按tab就会自动填充元数据啦，
+就像上面说的<s一样。
+另外，有些元数据可以加参数，比如：
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+BEGIN_SRC c -n
+int main()
+{
+  printf("hello org-mode\n");
+  return 0;
+}
+#+END_SRC
+\end{verbatim}
+#+END_LaTeX
+其中的-n可以设置行号，效果如下：
+#+BEGIN_SRC c -n
+int main()
+{
+  printf("hello org-mode\n");
+  return 0;
+}
+#+END_SRC
+
+除了上面列举的那些和文档内容有关的元数据，
+更多的元数据被用来设置org-mode的工作方式，
+比如设置导出行为之类的。
+如果你打开仓库中的.org文档，你会看到类似于
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+TITLE: An Emacs Tutorial for Vim User
+#+AUTHOR: w0mTea
+#+EMAIL: w0mT3a@gmail.com
+#+LATEX_CLASS: 
+#+LATEX_CLASS_OPTIONS:
+\end{verbatim}
+#+END_LaTeX
+的东西，这些都是不直接关乎内容的配置元数据。
+
+最后附加一句， org-mode中以#开始的行会被视为注释，
+如果想多行注释，可以用
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+BEGIN_COMMENT
+
+#+END_COMMENT
+\end{verbatim}
+#+END_LaTeX
+** To-Do
+org-mode除了用来写文档以外，还可以用作你的todo-list。
+这里会说说org-mode中的todo。
+*** 基础
+todo项是org-mode中todo的基本元素。
+todo项是的样子和标题十分像，它其实就是以TODO关键字打头的标题，比如这样：
+ 
+ *** TODO 写代码
+
+在org-mode中，todo项会以彩色显示，十分醒目。
+
+todo项和标题一样，也是分级结构，并同样构成一颗树。
+
+有了todo项我们又能干什么呢？
+首先，我们可以通过分级来把大的目标分解成小目标，
+之后，我们可以通过org-mode提供的操作来完成todo-list的管理。
+下面用一个例子来说明哈
+
+假设w0mTea需要写一个c语言编译器，因此他列了这样一个todo-list：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器\\
+ ** {\color{red}TODO} 词法分析\\
+ ** {\color{red}TODO} 语法分析\\
+ ** {\color{red}TODO} 语义分析\\
+ ** {\color{red}TODO} 中间代码\\
+ ** {\color{red}TODO} 生成汇编\\
+ ** {\color{red}TODO} 产生二进制码\\
+\end{verse}
+#+END_LaTeX
+经过漫长的努力，w0mTea终于完成了词法分析和语法分析，
+因此他把光标分别移动到词法分析和语法分析那一行，按了 
+*C-c C-t* ，
+然后todo-list就成了这样：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器\\
+ ** {\color{green}DONE} 词法分析\\
+ ** {\color{green}DONE} 语法分析\\
+ ** {\color{red}TODO} 语义分析\\
+ ** {\color{red}TODO} 中间代码\\
+ ** {\color{red}TODO} 生成汇编\\
+ ** {\color{red}TODO} 产生二进制码\\
+\end{verse}
+#+END_LaTeX
+这里出现的C-c C-t就是用来切换todo状态的，在普通标题、todo、done三个状态间循环切换。
+
+w0mTea觉得这样看着不太直观，他需要直观的统计他的进度，因此他给todo项做了点改变：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 [/]\\
+\end{verse}
+#+END_LaTeX
+之后他在[]上按了
+*C-c C-c* ，
+成了这样：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 {\color{yellow}[2/6]}\\
+ ** {\color{green}DONE} 词法分析\\
+ ** {\color{green}DONE} 语法分析\\
+ ** {\color{red}TODO} 语义分析\\
+ ** {\color{red}TODO} 中间代码\\
+ ** {\color{red}TODO} 生成汇编\\
+ ** {\color{red}TODO} 产生二进制码\\
+\end{verse}
+#+END_LaTeX
+这里的加上的内容用于显示子内容的完成度，除了
+#+BEGIN_LaTeX
+\begin{verbatim}
+[/]
+\end{verbatim}
+#+END_LaTeX
+这样的格式外，还可以把/换成%用来显示百分比。
+之后的C-c C-c会刷新进度显示。
+
+现在w0mTea觉得爽多了，可是他还想搞得更直观一点，
+于是他把todo-list弄成了这样：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 {\color{yellow}[\%]}\\
+ ~~- [ ] 词法分析\\
+ ~~~~- [ ] 输入正则表达式\\
+ ~~~~- [ ] 构建nfa\\
+ ~~~~- [ ] nfa转dfa\\
+ ~~- [ ] 语法分析\\
+ ~~- [ ] 语义分析\\
+ ~~- [ ] 中间代码\\
+ ~~- [ ] 生成汇编\\
+ ~~- [ ] 生成二进制\\
+\end{verse}
+#+END_LaTeX
+之后在他已完成的输入正则表达式上按
+*C-c C-c* ，
+成了这样：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 {\color{yellow}[0\%]}\\
+ ~~- [-] 词法分析\\
+ ~~~~- [X] 输入正则表达式\\
+ ~~~~- [ ] 构建nfa\\
+ ~~~~- [ ] nfa转dfa\\
+\end{verse}
+#+END_LaTeX
+这个列表加[]的东东被成为checkbox，
+这里的C-c C-c是用来切换checkbox完成状态的。
+注意此时词法分析项上的状态是-，表明部分子项完成。
+
+w0mTea给词法分析也加上了进度框，于是：
+#+BEGIN_LaTeX
+\begin{verse}
+ * {\color{red}TODO} 写编译器 {\color{yellow}[33\%]}\\
+ ~~- [X] 词法分析 {\color{yellow}[3/3]}\\
+ ~~~~- [X] 输入正则表达式\\
+ ~~~~- [X] 构建nfa\\
+ ~~~~- [X] nfa转dfa\\
+ ~~- [X] 语法分析\\
+ ~~- [ ] 语义分析\\
+ ~~- [ ] 中间代码\\
+ ~~- [ ] 生成汇编\\
+ ~~- [ ] 生成二进制\\
+\end{verse}
+#+END_LaTeX
+*** 快捷键
+上面的例子里讲了一些最常用的用法，
+这里总结一下常用快捷键：
+- S-M-<RET>：插入todo项
+- C-c C-t：切换todo状态
+- C-c C-c：切换checkbox完成状态、刷新进度
+** 导出
+<<org-mode-export>>
+上面写了一大堆，都只是纯文本的org文档而已，
+怎么才能导出成各种各样的其他格式呢？
+本节将会介绍一些常用格式的导出方法，更多的导出请参考org-manual
+*** 导出后端设置
+每一种导出格式都需要对应的导出后端，
+但不是所有的后端都默认启用，因此需要激活对应后端。
+默认启用的后端有ascii，html，icalendar和latex。
+
+在emacs中，
+*M-x customize <RET>*
+会进入配置模式，在搜索框中输入org-export-backend即可进入后端配置，如图：
+
+#+ATTR_LATEX: :float t
+#+NAME:customize 1
+[[file:images/customize1.png]]
+
+之后勾选想要的后端，去掉不想要的后端，如图：
+
+#+ATTR_LATEX: :float t
+#+NAME:customize 2
+[[file:images/customize2.png]]
+
+然后把光标移动到state按钮上按回车，
+选择0立即生效或1下次生效即可。
+
+#+ATTR_LATEX: :float t
+#+NAME:customize 3
+[[file:images/customize3.png]]
+*** 导出通用设置
+导出前，最好通过元数据对导出进行一些通用设置。
+使用
+*C-c C-e #* ，
+然后输入default，会自动插入通用设置模板，
+若输入特殊导出格式（比如html或latex），则会插入特殊模板。
+通用模板如下：
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:comment d:(not "LOGBOOK") date:t
+#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil prop:nil
+#+OPTIONS: stat:t tags:t tasks:t tex:t timestamp:t toc:t todo:t |:t
+#+TITLE: example
+#+DATE: <2014-12-17 三>
+#+AUTHOR: w0mTea
+#+EMAIL: w0mT3a@gmail.com
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.3.1 (Org mode 8.3beta)
+\end{verbatim}
+#+END_LaTeX
+
+下面，大概说说其中主要的一些选项：
+1. OPTIONS：
+   options中配置了许多行为，其中的选项用option:value的格式表示。
+   普遍来说，t表示启用，nil表示禁用，其他值表示具体的设置
+   - author：导出时显示作者
+   - date：导出时显示日期
+   - timestamp：导出时生成时间戳
+   - toc：导出时显示目录
+2. TITLE
+   文档的标题，默认情况下是文件名
+3. DATE
+   日期，默认情况下是插入选项模板时的日期
+4. AUTHOR
+   作者，默认和系统用户有关
+5. EMAIL
+   邮箱，默认和系统用户和系统hostname有关
+*** HTML
+导出成html可以使用
+*C-c C-e h* ，
+之后根据需要输入
+- h：导出成html文件
+- H：导出成html临时文件，在emacs中打开
+- o：导出成html并打开
+*** PDF
+导出成pdf需要有latex环境，否则生成的tex文件将无法编译。
+
+导出成pdf可以使用
+*C-c C-e l* ，
+之后根据需要输入：
+- L：导出成tex临时文件并打开
+- l：导出成tex文件
+- p：导出tex文件并生成pdf
+- o：导出tex文件，生成pdf并打开
+
+上面仅是导出成pdf的通用步骤，下面会说一些特殊的设置。
+**** 元数据设置
+**** 配置文件设置
+*** Markdown
+导出成markdown可以使用
+*C-c C-e m* ，
+之后根据需要输入：
+- M：导出成markdown临时文件并打开
+- m：导出成markdown文件
+- o：导出markdown文件并打开
+*** ODT
+odt是个啥子捏？这或就是开源的office格式，
+导出odt，再用libreoffice等软件打开转存，就可以转存成MS office格式。
+
+导出odt需要zip程序，使用前请确保已安装它。
+
+导出可以使用
+*C-c C-e o o* 
+来导出成odt文件。
+** 参考资料
+<<org-mode-manual>>
+- org-mode manual:http://orgmode.org/manual/index.html
+* 文档和资料
+  <<documents>>
+  - emacs manual: [[http://www.gnu.org/software/emacs/manual/html_node/emacs/index.html]]
+  - emacs wiki: [[http://www.emacswiki.org/emacs/]]
+  - A blog: http://home.fnal.gov/~neilsen/notebook/orgExamples/org-examples.html
+* 致谢
+* 结尾
+  本文仓促写成，错漏颇多，还望各位指出错误，让这份教程可以帮助更多的人。
