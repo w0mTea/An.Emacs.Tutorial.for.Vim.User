@@ -16,28 +16,30 @@
 * Introduction
 This file *IS NOT* the tutorial, and the *PDF file* in the repo is that.
 
-This file is an introduction to those who want to modify the org file and export it
-to pdf files on their local environment.
+In *Latest change*, I introduce changes of the tutorial.
+This part is for readers.
+
+In *My environment*, I show my envinronment information.
+This part is for those who want to write and export.
+
+In *org-mode settings*, I list my settings about org-mode.
+Both readers and writers can use it.
 * Latest change
---------
 For those who want to have a glance at the newest commit,
 I add this part.
 You can download the new compiled PDF file only when you find
 something which you're interested in here.
 -------
+#+BEGIN_VERSE
 2015-01-31
 Add some contents of org-mode exporting to PDF
-* README's Change log
-2015-01-31
-Add latest change part
-2015-01-13
-Update settings about org-mode
+#+END_VERSE
 * My environment
 I write this document in Emacs 24.3.1 with org-mode 8.3beta.
 
 According to my experience, there are some changes between org-mode 7.9 and 8.3beta.
 So I suggest you'd better use org-mode greater than 8.0 to export the org file.
-* org-mode LaTeX settings
+* org-mode settings
 Here is my settings about org-mode
 #+BEGIN_SRC lisp
   ; org-mode export to latex
