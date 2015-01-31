@@ -14,13 +14,24 @@
 #+CREATOR: Emacs 24.3.1 (Org mode 8.3beta)
 
 * Introduction
-This file *IS NOT* the tutorial, and the *pdf file* in the repo is that.
+This file *IS NOT* the tutorial, and the *PDF file* in the repo is that.
 
 This file is an introduction to those who want to modify the org file and export it
 to pdf files on their local environment.
-* Change log
+* Latest change
+--------
+For those who want to have a glance at the newest commit,
+I add this part.
+You can download the new compiled PDF file only when you find
+something which you're interested in here.
+-------
+2015-01-31
+Add some contents of org-mode exporting to PDF
+* README's Change log
+2015-01-31
+Add latest change part
 2015-01-13
-update settings about org-mode
+Update settings about org-mode
 * My environment
 I write this document in Emacs 24.3.1 with org-mode 8.3beta.
 

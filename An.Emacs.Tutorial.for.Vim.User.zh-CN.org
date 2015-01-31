@@ -203,7 +203,7 @@ el-get安好了，那么怎么安装evil-mode呢？回到上面那段代码，�
  '(el-get				
    switch-window			
    auto-complete			
-   evil-mode
+   evil
    zencoding-mode			
    color-theme		                
    color-theme-tango))	                
@@ -1133,6 +1133,51 @@ w0mTea给词法分析也加上了进度框，于是：
 
 上面仅是导出成pdf的通用步骤，下面会说一些特殊的设置。
 **** 元数据设置
+使用
+*C-c C-e #* 插入导出元数据时，选择latex就可以插入latex专用的元数据。
+主要有以下几个：
+#+BEGIN_LaTeX
+\begin{verbatim}
+#+LATEX_CLASS:
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER:
+#+LATEX_HEADER_EXTRA:
+\end{verbatim}
+#+END_LaTeX
+下面分别说下它们的作用。
+- LATEX CLASS
+
+  这个是org-mode中设置的一个导出模板，这个模板会在tex文件的导言区设置一堆东西。
+  默认的模板和latex默认文档类是一致的，有article report book等。
+  自定义模板的内容在后文给出。
+- LATEX CLASS OPTIONS
+
+  这个用来传递LATEX CLASS用到的一些选项。比如在latex中可以设置
+  #+BEGIN_SRC latex
+  \documentclass[onside]{book}
+  #+END_SRC
+  如何把选项传递给book放在上面的[]中呢？很简单，把选项写在该项后就好：
+  #+BEGIN_LaTeX
+  \begin{verbatim}
+  #+LATEX_CLASS: book
+  #+LATEX_CLASS_OPTIONS: [oneside]
+  \end{verbatim}
+  #+END_LaTeX
+- LATEX HEADER
+
+  用latex经常需要一些包。如果这些包没在LATEX CLASS模板中列出，那么就需要自己加上。
+  假如我们需要使用amsmath宏包：
+  #+BEGIN_LaTeX
+  \begin{verbatim}
+  #+LATEX_HEADER: \usepackage{amsmath}
+  \end{verbatim}
+  #+END_LaTeX
+  该元数据可以出现多个
+- LATEX HEAD EXTRA
+
+  使用方法同上，直观上的区别就是加在这个里的latex代码会出现的相对靠后……
+  另外的区别就是写在这里的宏包在latex片段预览中不会被用到。
+  片段预览的内容见[[http://orgmode.org/manual/Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments][org-mode手册]]
 **** 配置文件设置
 *** Markdown
 导出成markdown可以使用

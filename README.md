@@ -3,9 +3,10 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#sec-1">1. Introduction</a></li>
-<li><a href="#sec-2">2. Change log</a></li>
-<li><a href="#sec-3">3. My environment</a></li>
-<li><a href="#sec-4">4. org-mode LaTeX settings</a></li>
+<li><a href="#sec-2">2. Latest change</a></li>
+<li><a href="#sec-3">3. README's Change log</a></li>
+<li><a href="#sec-4">4. My environment</a></li>
+<li><a href="#sec-5">5. org-mode LaTeX settings</a></li>
 </ul>
 </div>
 </div>
@@ -13,24 +14,40 @@
 
 # Introduction<a id="sec-1"></a>
 
-This file **IS NOT** the tutorial, and the **pdf file** in the repo is that.
+This file **IS NOT** the tutorial, and the **PDF file** in the repo is that.
 
 This file is an introduction to those who want to modify the org file and export it
 to pdf files on their local environment.
 
-# Change log<a id="sec-2"></a>
+# Latest change<a id="sec-2"></a>
 
+---
+
+For those who want to have a glance at the newest commit,
+I add this part.
+You can download the new compiled PDF file only when you find
+something which you're interested in here.
+
+---
+
+2015-01-31
+Add some contents of org-mode exporting to PDF
+
+# README's Change log<a id="sec-3"></a>
+
+2015-01-31
+Add latest change part
 2015-01-13
-update settings about org-mode
+Update settings about org-mode
 
-# My environment<a id="sec-3"></a>
+# My environment<a id="sec-4"></a>
 
 I write this document in Emacs 24.3.1 with org-mode 8.3beta.
 
 According to my experience, there are some changes between org-mode 7.9 and 8.3beta.
 So I suggest you'd better use org-mode greater than 8.0 to export the org file.
 
-# org-mode LaTeX settings<a id="sec-4"></a>
+# org-mode LaTeX settings<a id="sec-5"></a>
 
 Here is my settings about org-mode
 
