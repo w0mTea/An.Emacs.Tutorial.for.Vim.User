@@ -34,6 +34,8 @@ something which you're interested in here.
 ---
 
 <p class="verse">
+2015-02-01<br  />
+Add contents about org-mode exporting to PDF, including how to set your own LATEX CLASS<br  />
 2015-01-31<br  />
 Add some contents of org-mode exporting to PDF<br  />
 </p>
@@ -47,7 +49,30 @@ So I suggest you'd better use org-mode greater than 8.0 to export the org file.
 
 # org-mode settings<a id="sec-4"></a>
 
-Here is my settings about org-mode
+Here is my settings about org-mode.
+While satisfing all the dependences, you can use it directly when exporting to PDF files.
+
+Dependences are listed below:
+
+-   latex pakcages
+    -   listings
+    -   color
+    -   hyperref
+    -   xcolor
+    -   fontspec
+    -   indentfirst
+    -   xunicode
+    -   amsmath
+    -   graphicx
+-   fronts
+    -   SimSun
+    -   DejaVu Sans
+    -   DejaVu Serif
+    -   DejaVu Sans Mono
+
+I list two latex classes, my-org-book-zh and my-org-aritcle-zh,
+they both support Chinese.
+You can use what you like, or create a new one.
 
     ; org-mode export to latex
     (require 'ox-latex)
@@ -87,7 +112,6 @@ Here is my settings about org-mode
     \\setmainfont{DejaVu Sans} % 英文衬线字体
     \\setsansfont{DejaVu Serif} % 英文无衬线字体
     \\setmonofont{DejaVu Sans Mono} % 英文等宽字体
-    %\\punctstyle{DejaVu Sans} % 开明式标点格式
     
     
     \\defaultfontfeatures{Mapping=tex-text} %如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
@@ -108,6 +132,44 @@ Here is my settings about org-mode
     [EXTRA]
     "
                  ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+    
+    (add-to-list 'org-latex-classes
+              '("my-org-article-zh"
+    "\\documentclass{article}
+    \\usepackage[slantfont, boldfont]{xeCJK}
+    [NO-DEFAULT-PACKAGES]
+    [PACKAGES]
+    \\setCJKmainfont{SimSun} % 设置缺省中文字体
+    \\parindent 2em
+    
+    \\setmainfont{DejaVu Sans} % 英文衬线字体
+    \\setsansfont{DejaVu Serif} % 英文无衬线字体
+    \\setmonofont{DejaVu Sans Mono} % 英文等宽字体
+    %\\punctstyle{DejaVu Sans} % 开明式标点格式
+    
+    
+    \\defaultfontfeatures{Mapping=tex-text} %如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+    
+    % 中文断行
+    \\XeTeXlinebreaklocale \"zh\"
+    \\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+    
+    % 代码设置
+    \\lstset{numbers=left, 
+    numberstyle= \\tiny, 
+    keywordstyle= \\color{ blue!70},commentstyle=\\color{red!50!green!50!blue!50}, 
+    frame=shadowbox, 
+    breaklines=true,
+    rulesepcolor= \\color{ red!20!green!20!blue!20} 
+    } 
+    
+    [EXTRA]
+    "
                  ("\\section{%s}" . "\\section*{%s}")
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
