@@ -1133,6 +1133,7 @@ w0mTea给词法分析也加上了进度框，于是：
 
 上面仅是导出成pdf的通用步骤，下面会说一些特殊的设置。
 **** 元数据设置
+
 使用
 *C-c C-e #* 插入导出元数据时，选择latex就可以插入latex专用的元数据。
 主要有以下几个：
@@ -1178,7 +1179,86 @@ w0mTea给词法分析也加上了进度框，于是：
   使用方法同上，直观上的区别就是加在这个里的latex代码会出现的相对靠后……
   另外的区别就是写在这里的宏包在latex片段预览中不会被用到。
   片段预览的内容见[[http://orgmode.org/manual/Previewing-LaTeX-fragments.html#Previewing-LaTeX-fragments][org-mode手册]]
-**** 配置文件设置
+**** 导出模板设置
+
+注意：本部分内容和org mode版本强烈相关，
+版本低于8的org mode绝对无法成功按照本章所讲进行设置。
+
+默认导出模板可以自己进行修改，同时你也可以自定义新的模板。
+
+首先，在进行配置之前，需要在配置文件中加上下面这句话：
+#+BEGIN_SRC lisp
+(require 'ox-latex)
+(setq org-export-latex-listings t)
+#+END_SRC
+
+之后，可以通过如下形式把常用的宏包加入到包列表中。
+这样，在导出时就会把你需要的宏包加入。下面以hyperref为例：
+#+BEGIN_SRC lisp
+(add-to-list 'org-latex-packages-alist
+	     '("" "hyperref" t))
+#+END_SRC
+
+通过如下格式可以自定义导出模板：
+#+BEGIN_SRC lisp
+(add-to-list 'org-latex-classes
+          '("模板名"
+"\\documentclass{这里写你需要的}
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+[EXTRA]
+"
+             ("\\section{%s}" . "\\section*{%s}")
+             ("\\subsection{%s}" . "\\subsection*{%s}")
+             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+             ("\\paragraph{%s}" . "\\paragraph*{%s}")
+             ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+END_SRC
+其中的[NO-DEFAULT-PACKAGES]表示不加载默认宏包。
+org-mode中有着一系列的默认宏包，如果不加上此行会把那些包全加上，
+很容易导致包冲突，因此建议一定要加上这行，
+再手动把常用宏包加到你的列表中。
+
+[PACKAGES]表示需要加载你列出的宏包。
+
+[EXTRA]表示需要加载额外的宏包。
+
+在上面的部分可以加入一些其他的latex代码做各种设置。
+具体的例子见README文档中列出的配置，那个就配置了许多东西。
+
+再往后的部分内容表示了org-mode中标题结构的对应latex代码。
+上文列出的
+#+BEGIN_SRC lisp
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+#+END_SRC
+表示一级标题对应latex中的section，二级标题对应subsection，
+后面的以此类推。
+上文只有5个部分，超出的标题等级会对应到有序列表。
+
+最后，我把我的配置放在了README中，
+只要安装相应的宏包和字体，就可以直接使用此配置。
+具体的说明见README文档。
+此配置支持导出中文。
+**** 更改编译程序
+
+默认下导出成PDF会用latex编译。如果想改成其他程序（比如xelatex）可以这么做：
+#+BEGIN_SRC lisp
+(setq org-latex-pdf-process
+      '("xelatex -interaction nonstopmode %b"
+    "xelatex -interaction nonstopmode %b"))
+#+END_SRC
+注意，上文中的%b表示对应的tex文件，-interaction nonstopmode是程序参数。
+为了保证目录、引用等的正确，请务必把你的编译命令写两遍，像上文例子一样。
+**** 导出中的code block
+
+默认情况下，导出时会把code block转换为latex中的verbatim，也就是原样输出。
+这样虽然保证了缩进等等，可是却无法使用代码高亮等。
+因此可以设置code block对应的latex内容。以listings包为例：
+#+BEGIN_SRC lisp
+(add-to-list 'org-latex-listings '("" "listings"))
+(add-to-list 'org-latex-listings '("" "color"))
+#+END_SRC
 *** Markdown
 导出成markdown可以使用
 *C-c C-e m* ，
