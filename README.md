@@ -54,7 +54,7 @@ While satisfing all the dependences, you can use it directly when exporting to P
 
 Dependences are listed below:
 
--   latex pakcages
+-   LaTeX pakcages
     -   listings
     -   color
     -   hyperref
@@ -64,7 +64,7 @@ Dependences are listed below:
     -   xunicode
     -   amsmath
     -   graphicx
--   fronts
+-   fonts
     -   SimSun
     -   DejaVu Sans
     -   DejaVu Serif
